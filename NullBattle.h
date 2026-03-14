@@ -1,0 +1,9 @@
+﻿// NullBattle.h : Include file for standard system include files,
+// or project specific include files.
+
+#pragma once
+
+#include <iostream>
+#include "core/battle/BattleStateMachine.cpp"
+
+// TODO: Reference additional headers your program requires here.

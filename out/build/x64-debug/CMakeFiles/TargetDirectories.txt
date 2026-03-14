@@ -1,0 +1,3 @@
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/NullBattle.dir
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/edit_cache.dir
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
