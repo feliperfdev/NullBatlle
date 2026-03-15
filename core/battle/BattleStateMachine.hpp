@@ -30,7 +30,17 @@ class BattleStateMachine {
 		Player player1;
 		Player player2;
 
+		std::optional<BattleAction> p1Action;
+		std::optional<BattleAction> p2Action;
+
+		bool checkIfP1HasAction();
+		bool checkIfP2HasAction();
+
+		void executeTurnActions();
+
 		int winnerId;
+
+		void checkWinner();
 
 		BattleState currentState;
 

@@ -36,7 +36,7 @@ BattleStateMachine::BattleStateMachine(
 
 BattleState BattleStateMachine::getState() const { return currentState; }
 
-int BattleStateMachine::getWinner() {
+void BattleStateMachine::checkWinner() {
 	if (isOver(player1.team.party)) {
 		winnerId = player2.id;
 		currentState = BattleState::BATTLE_END;
@@ -45,16 +45,29 @@ int BattleStateMachine::getWinner() {
 		winnerId = player1.id;
 		currentState = BattleState::BATTLE_END;
 	}
-
-	return winnerId;
 }
 
-void BattleStateMachine::player1Action(BattleAction action) {
+int BattleStateMachine::getWinner() { return winnerId; }
 
+void BattleStateMachine::player1Action(BattleAction action) {
+	p1Action = action;
+
+	executeTurnActions();
 }
 
 void BattleStateMachine::player2Action(BattleAction action) {
+	p2Action = action;
 
+	executeTurnActions();
+}
+
+bool BattleStateMachine::checkIfP1HasAction() {return p1Action.has_value();}
+bool BattleStateMachine::checkIfP2HasAction() { return p2Action.has_value(); }
+
+void BattleStateMachine::executeTurnActions() {
+	if (!checkIfP1HasAction() && !checkIfP2HasAction()) return;
+
+	currentState = BattleState::ACTION_EXECUTING_TURN;
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {

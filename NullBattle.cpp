@@ -25,7 +25,15 @@ int main()
 	);
 
 	while (battleEngine.getWinner() == 0) {
+		
+		if (battleEngine.getState() == BattleState::ACTION_TURN) {
+			battleEngine.player1Action(BattleAction{ ActionType::USE_MOVE, 0 });
+			battleEngine.player2Action(BattleAction{ ActionType::USE_ITEM, 0 });
+		}
 
+		if (battleEngine.getState() == BattleState::ACTION_EXECUTING_TURN) {
+			
+		}
 	}
 
 	if (battleEngine.getState() == BattleState::BATTLE_END) {
