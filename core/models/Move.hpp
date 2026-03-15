@@ -9,11 +9,10 @@ struct Move
 
 	std::optional<int> power;
 
-	// 1 = Físico ; 2 = Especial
+	// 0 = Default; 1 = Físico ; 2 = Especial
 	unsigned int category;
 
 	Types type;
 
 	std::string name;
-	
 };

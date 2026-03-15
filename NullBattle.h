@@ -4,6 +4,6 @@
 #pragma once
 
 #include <iostream>
-#include "core/battle/BattleStateMachine.cpp"
+#include "core/battle/BattleStateMachine.hpp"
 
 // TODO: Reference additional headers your program requires here.

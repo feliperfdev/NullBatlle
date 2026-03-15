@@ -4,6 +4,7 @@
 #include <string>
 #include <array>
 #include <optional>
+#include <iostream>
 #include "../models/Player.hpp"
 #include "../models/Pokemon.hpp"
 #include "../models/Team.hpp"
@@ -36,6 +37,8 @@ class BattleStateMachine {
 		std::array<bool, 6> getDefeatedPokemon(const std::array<Pokemon, 6>& party);
 
 		void getActivePokemon(Team& playerTeam);
+
+		void log(std::string text);
 };
 
 #endif // BATTLE_STATE_MACHINE

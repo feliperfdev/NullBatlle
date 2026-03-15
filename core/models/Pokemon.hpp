@@ -1,12 +1,16 @@
+#pragma once
+
 #include "Move.hpp"
 
 struct Pokemon
 {
+	std::string name;
 	int currentHP;
 	
 	// 0 = maxHP, 1 = Atk, 2 = Sp.Atk, 3 = Def, 4 = Sp.Def, 5 = Spe.
 	std::array<int, 6> stats;
 
+	// 0 = None
 	// 1 = Burned
 	// 2 = Sleep
 	// 3 = Paralyzed

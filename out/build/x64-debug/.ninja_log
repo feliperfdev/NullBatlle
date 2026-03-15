@@ -1,3 +1,5 @@
 # ninja log v6
-66	1344	7951946000418543	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-1346	1705	7951946013198996	NullBattle.exe	2c67ececc2d7bc79
+5	904	7952372976526032	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
+39	915	7952380063971719	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
+4	18	7952371383485648	clean	5345ca6175c2c29c
+915	1089	7952380072762060	NullBattle.exe	fe10b83e2f716dc9
