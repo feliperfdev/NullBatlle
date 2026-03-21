@@ -1,4 +1,6 @@
+#include <map>
 enum class Types : int {
+	NONE = 0,
 	FIRE = 1,
 	GRASS = 2,
 	WATER = 3,
@@ -18,3 +20,30 @@ enum class Types : int {
 	GHOST = 17,
 	FAIRY = 18
 };
+
+inline std::map<std::string, Types> TypesMap = {
+	{"fire",     Types::FIRE},
+	{"grass",    Types::GRASS},
+	{"water",    Types::WATER},
+	{"normal",     Types::NORMAL},
+	{"electric",    Types::ELECTRIC},
+	{"dark",    Types::ELECTRIC},
+	{"poison",     Types::POISON},
+	{"flying",    Types::FLYING},
+	{"fighting",    Types::FIGHTING},
+	{"ice",     Types::ICE},
+	{"psychic",    Types::PSYCHIC},
+	{"ground",    Types::GROUND},
+	{"rock",     Types::ROCK},
+	{"steel",    Types::STEEL},
+	{"bug",    Types::BUG},
+	{"dragon",    Types::DRAGON},
+	{"ghost",     Types::GHOST},
+	{"fairy",    Types::FAIRY}
+};
+
+inline Types typeFromString(const std::string& name) {
+	auto it = TypesMap.find(name);
+	if (it != TypesMap.end()) return it->second;
+	return Types::NORMAL;
+}

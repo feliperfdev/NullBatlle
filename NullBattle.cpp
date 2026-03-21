@@ -30,20 +30,24 @@ int main()
 		{
 			Pokemon {
 				"Charmander",
+				5,
 				20,
+				{ Types::FIRE },
 				{ 20, 0, 0, 0, 0, 0 },
 				0,
-				{ Move{{15, 15}, 7, 40, 0, 1, Types::NORMAL, "Tackle"} }
+				{ Move{{15, 15}, 7, 0, 1, Types::NORMAL, "Tackle"} }
 			}
 		},
 
 		{
 			Pokemon{
 				"Bulbasaur",
+				5,
 				20,
+				{ Types::GRASS },
 				{ 20, 0, 0, 0, 0, 0 },
 				0,
-				{ Move{{20, 20}, 6, 30, 0, 1, Types::NORMAL, "Scratch"} }
+				{ Move{{20, 20}, 6, 0, 1, Types::NORMAL, "Scratch"} }
 			}
 		}
 	);

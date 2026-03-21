@@ -1,27 +1,16 @@
 # ninja log v6
-5	904	7952372976526032	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-39	915	7952380063971719	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
 4	18	7952371383485648	clean	5345ca6175c2c29c
-915	1089	7952380072762060	NullBattle.exe	fe10b83e2f716dc9
-46	412	7952977276919896	CMakeFiles/NullBattle.dir/core/battle/TurnEngine.cpp.obj	29528cb31e80863
-5	946	7952979117054886	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-10	959	7952979117099899	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
-960	1267	7952979126601905	NullBattle.exe	2c445ed2db3908
-36	936	7952980147223056	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-937	1103	7952980156229527	NullBattle.exe	2c445ed2db3908
-34	974	7952981505928418	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-975	1148	7952981515341675	NullBattle.exe	2c445ed2db3908
-44	956	7952982292006167	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
-36	959	7952982291886699	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-959	1139	7952982301158444	NullBattle.exe	2c445ed2db3908
-36	981	7952982488586813	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
-982	1158	7952982498131577	NullBattle.exe	2c445ed2db3908
-37	933	7952983703989396	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
-934	1122	7952983713042662	NullBattle.exe	2c445ed2db3908
-39	954	7952984151487894	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
-51	964	7952984151589480	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
-964	1154	7952984160699701	NullBattle.exe	2c445ed2db3908
-52	1307	7952992472736083	CMakeFiles/NullBattle.dir/core/battle/TurnEngine.cpp.obj	29528cb31e80863
-36	1374	7952992472544470	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	76f7ce2d1a53b62c
 43	1396	7952992472633323	CMakeFiles/NullBattle.dir/core/battle/BattleStateMachine.cpp.obj	aa2037272a813e2b
+64	1034	7958125608750375	CMakeFiles/NullBattle.dir/NullBattle.cpp.obj	f33e86aec6db8da1
+439	534	7958124567682228	data/nullbattle_data.lib	e4c942a623a8e1d0
+57	146	7958125608678964	data/CMakeFiles/nullbattle_data.dir/DataLoader.cpp.obj	60cf9f625db8588c
 1396	1631	7952992486154026	NullBattle.exe	2c445ed2db3908
+52	1307	7952992472736083	CMakeFiles/NullBattle.dir/core/battle/TurnEngine.cpp.obj	29528cb31e80863
+39	1476	7958126503872669	build.ninja	a1fda39f3ac68b79
+39	1476	7958126503754674	C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/cmake_install.cmake	a1fda39f3ac68b79
+39	1476	7958126503754674	C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build/cmake_install.cmake	a1fda39f3ac68b79
+39	1476	7958126503872669	C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/ui/cmake_install.cmake	a1fda39f3ac68b79
+39	1476	7958126503872669	C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/cmake_install.cmake	a1fda39f3ac68b79
+39	1476	7958126503872669	C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/data/cmake_install.cmake	a1fda39f3ac68b79
+57	136	7958126530153831	data/CMakeFiles/nullbattle_data.dir/DataLoader.cpp.obj	d1e37be3db72937c
+40	764	7958126529947197	core/CMakeFiles/nullbattle_core.dir/battle/BattleStateMachine.cpp.obj	c9342eb28ab69de3

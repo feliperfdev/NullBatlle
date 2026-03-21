@@ -131,7 +131,6 @@ def fetch_moves():
         data = get(url)
 
         # Verifica se o move existe em alguma versão Gen 3
-        version_groups = {vg["version_group"]["name"] for vg in data.get("contest_combos", {}) or {}}
         in_gen3 = any(
             vg["version_group"]["name"] in gen3_version_groups
             for vg in data.get("machines", [])
@@ -139,10 +138,6 @@ def fetch_moves():
 
         # Alternativa mais confiável: checar a generation
         generation = data.get("generation", {}).get("name", "")
-        introduced_gen = int(generation.replace("generation-", "").replace(
-            "i", "1").replace("ii", "2").replace("iii", "3").replace(
-            "iv", "4").replace("v", "5").replace("vi", "6").replace(
-            "vii", "7").replace("viii", "8")) if generation else 99
 
         # Converte geração romana para número
         gen_map = {
@@ -236,11 +231,11 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # Pokemon
-    pokemon = fetch_pokemon()
-    path = os.path.join(OUTPUT_DIR, "pokemon.json")
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(pokemon, f, indent=2, ensure_ascii=False)
-    print(f"\n✓ Salvo: {path} ({len(pokemon)} pokémon)")
+    # pokemon = fetch_pokemon()
+    # path = os.path.join(OUTPUT_DIR, "pokemon.json")
+    # with open(path, "w", encoding="utf-8") as f:
+    #    json.dump(pokemon, f, indent=2, ensure_ascii=False)
+    # print(f"\n✓ Salvo: {path} ({len(pokemon)} pokémon)")
 
     # Moves
     moves = fetch_moves()
@@ -250,11 +245,11 @@ def main():
     print(f"✓ Salvo: {path} ({len(moves)} moves)")
 
     # Typechart
-    typechart = fetch_typechart()
-    path = os.path.join(OUTPUT_DIR, "typechart.json")
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(typechart, f, indent=2, ensure_ascii=False)
-    print(f"✓ Salvo: {path}")
+    # typechart = fetch_typechart()
+    # path = os.path.join(OUTPUT_DIR, "typechart.json")
+    # with open(path, "w", encoding="utf-8") as f:
+    #    json.dump(typechart, f, indent=2, ensure_ascii=False)
+    # print(f"✓ Salvo: {path}")
 
     print("\n=== Concluído! Arquivos em ./data/ ===")
 

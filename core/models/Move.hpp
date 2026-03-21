@@ -11,8 +11,6 @@ struct Move
 
 	std::optional<int> power;
 
-	int speed;
-
 	unsigned int priority;
 
 	// 0 = Default; 1 = Físico ; 2 = Especial
@@ -21,4 +19,10 @@ struct Move
 	Types type;
 
 	std::string name;
+
+	public:
+		bool isPhysicalMove() const { return category == 1; }
+		bool isSpecialMove() const { return category == 2; }
+
+		bool isDamageMove() const { return power.has_value(); }
 };

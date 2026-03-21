@@ -1,7 +1,11 @@
 {
 	"InstallScripts" : 
 	[
-		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/cmake_install.cmake"
+		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/cmake_install.cmake",
+		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build/cmake_install.cmake",
+		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/cmake_install.cmake",
+		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/data/cmake_install.cmake",
+		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/ui/cmake_install.cmake"
 	],
 	"Parallel" : false
 }

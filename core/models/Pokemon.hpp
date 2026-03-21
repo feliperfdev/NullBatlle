@@ -5,10 +5,13 @@
 struct Pokemon
 {
 	std::string name;
-	int currentHP;
+	unsigned int level;
+	unsigned int currentHP;
+
+	std::array<Types, 2> types;
 	
 	// 0 = maxHP, 1 = Atk, 2 = Sp.Atk, 3 = Def, 4 = Sp.Def, 5 = Spe.
-	std::array<int, 6> stats;
+	std::array<unsigned int, 6> stats;
 
 	// 0 = None
 	// 1 = Burned
@@ -18,17 +21,17 @@ struct Pokemon
 	// 5 = Freezed
 	// 6 = Confusion
 	// 7 = Attracted
-	int battleCondition;
+	unsigned int battleCondition;
 
 	std::array<Move, 4> moves;
 
 	public:
-		int maxHP() const { return stats[0]; }
-		int attack() const { return stats[1]; }
-		int spAttack() const { return stats[2]; }
-		int defense() const { return stats[3]; }
-		int sdDefense() const { return stats[4]; }
-		int speed() const { return stats[5]; }
+		unsigned int maxHP() const { return stats[0]; }
+		unsigned int attack() const { return stats[1]; }
+		unsigned int spAttack() const { return stats[2]; }
+		unsigned int defense() const { return stats[3]; }
+		unsigned int sdDefense() const { return stats[4]; }
+		unsigned int speed() const { return stats[5]; }
 
 		bool isNotDefeated() const { return currentHP > 0; }
 

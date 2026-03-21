@@ -59,12 +59,19 @@ void TurnEngine::executeMoveAction(
 	Pokemon& defender,
 	Move move
 ) {
-	if (move.power.has_value()) {
-		int attackerAtkPoints = move.power.value();
+	if (move.isDamageMove()) {
+		unsigned int attackerAtkPoints = move.power.value();
 
-		int defenderLoseHP = defender.currentHP - attackerAtkPoints;
+		unsigned int dano = (((2 * attacker.level / 5 + 2) * move.power.value() * attacker.attack() / defender.defense()) / 50 + 2);
 
-		defender = Pokemon { defender.name, defenderLoseHP, defender.stats, defender.battleCondition, defender.moves };
+		if (defender.currentHP - attackerAtkPoints <= 0) {
+			defender = Pokemon{ defender.name, defender.level, 0, defender.types, defender.stats, defender.battleCondition, defender.moves };
+		}
+		else {
+			unsigned int defenderLoseHP = defender.currentHP - attackerAtkPoints;
+
+			defender = Pokemon{ defender.name, defender.level, defenderLoseHP, defender.types, defender.stats, defender.battleCondition, defender.moves };
+		}
 	}
 }
 

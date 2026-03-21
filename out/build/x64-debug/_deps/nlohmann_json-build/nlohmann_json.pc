@@ -1,0 +1,4 @@
+Name: nlohmann_json
+Description: JSON for Modern C++
+Version: 3.11.3
+Cflags: -IC:/Dev/Estudos - DEV/c_cpp/NullBattle/out/install/x64-debug/include
