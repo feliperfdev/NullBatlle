@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Types.hpp"
 #include <string>
 #include <optional>
@@ -8,6 +10,10 @@ struct Move
 	std::array<int, 2> pp; // Power points
 
 	std::optional<int> power;
+
+	int speed;
+
+	unsigned int priority;
 
 	// 0 = Default; 1 = Físico ; 2 = Especial
 	unsigned int category;

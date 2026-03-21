@@ -4,6 +4,8 @@
 #pragma once
 
 #include <iostream>
+#include <locale.h>
 #include "core/battle/BattleStateMachine.hpp"
+#include "core/battle/TurnEngine.hpp"
 
 // TODO: Reference additional headers your program requires here.

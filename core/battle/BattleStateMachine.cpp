@@ -49,35 +49,39 @@ void BattleStateMachine::checkWinner() {
 
 int BattleStateMachine::getWinner() { return winnerId; }
 
+bool BattleStateMachine::gameHasWinner() { return getWinner() != 0; }
+
 void BattleStateMachine::player1Action(BattleAction action) {
 	p1Action = action;
-
 	executeTurnActions();
 }
 
 void BattleStateMachine::player2Action(BattleAction action) {
 	p2Action = action;
-
 	executeTurnActions();
 }
 
-bool BattleStateMachine::checkIfP1HasAction() {return p1Action.has_value();}
+bool BattleStateMachine::checkIfP1HasAction() { return p1Action.has_value(); }
 bool BattleStateMachine::checkIfP2HasAction() { return p2Action.has_value(); }
 
 void BattleStateMachine::executeTurnActions() {
-	if (!checkIfP1HasAction() && !checkIfP2HasAction()) return;
+	if (!checkIfP1HasAction() || !checkIfP2HasAction()) return;
 
 	currentState = BattleState::ACTION_EXECUTING_TURN;
+
+	log("Entrando em modo de execução do turno...");
+
+	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
+
+	int order = turnEngine.determineOrder(
+		player1.team.inBattle(),
+		player2.team.inBattle()
+	);
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {
 	int count = 0;
-
-	for (auto& p : playerTeam) {
-		if (p.currentHP == 0) {
-			count++;
-		}
-	}
+	for (auto& p : playerTeam) { if (p.currentHP == 0) { count++; } }
 
 	return count == playerTeam.size();
 }
@@ -86,19 +90,13 @@ std::array<bool, 6> BattleStateMachine::getDefeatedPokemon(const std::array<Poke
 	std::array<bool, 6> defeated = {};
 
 	for (int i = 0; i < party.size(); i++) {
-		if (party.at(i).currentHP == 0) {
-			defeated[i] = true;
-		}
-		else {
-			defeated[i] = false;
-		}
+		defeated[i] = !party.at(i).isNotDefeated();
 	}
 
 	return defeated;
 }
 
 void BattleStateMachine::getActivePokemon(Team& playerTeam) {
-
 	for (int i = 0; i < playerTeam.defeated.size(); i++) {
 		if (!playerTeam.defeated.at(i)) {
 			playerTeam.activePokemon = i;

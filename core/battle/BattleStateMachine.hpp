@@ -10,6 +10,7 @@
 #include "../models/Team.hpp"
 #include "BattleAction.hpp"
 #include "BattleState.hpp"
+#include "TurnEngine.hpp"
 
 class BattleStateMachine {
 	public:
@@ -22,9 +23,7 @@ class BattleStateMachine {
 		void player1Action(BattleAction action);
 		void player2Action(BattleAction action);
 
-		bool isOver(const std::array<Pokemon, 6>& playerTeam) const;
-
-		int getWinner();
+		bool gameHasWinner();
 
 	private:
 		Player player1;
@@ -32,6 +31,8 @@ class BattleStateMachine {
 
 		std::optional<BattleAction> p1Action;
 		std::optional<BattleAction> p2Action;
+
+		bool isOver(const std::array<Pokemon, 6>& playerTeam) const;
 
 		bool checkIfP1HasAction();
 		bool checkIfP2HasAction();
@@ -41,6 +42,8 @@ class BattleStateMachine {
 		int winnerId;
 
 		void checkWinner();
+
+		int getWinner();
 
 		BattleState currentState;
 

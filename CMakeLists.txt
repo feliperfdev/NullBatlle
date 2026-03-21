@@ -12,7 +12,7 @@ endif()
 project ("NullBattle")
 
 # Add source to this project's executable.
-add_executable (NullBattle "NullBattle.cpp" "NullBattle.h" "core/battle/BattleStateMachine.cpp")
+add_executable (NullBattle "NullBattle.cpp" "NullBattle.h" "core/battle/BattleStateMachine.cpp" "core/battle/TurnEngine.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NullBattle PROPERTY CXX_STANDARD 20)

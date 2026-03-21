@@ -67,6 +67,15 @@ build CMakeFiles\NullBattle.dir\core\battle\BattleStateMachine.cpp.obj: CXX_COMP
   TARGET_PDB = NullBattle.pdb
   TARGET_SUPPORT_DIR = CMakeFiles\NullBattle.dir
 
+build CMakeFiles\NullBattle.dir\core\battle\TurnEngine.cpp.obj: CXX_COMPILER__NullBattle_unscanned_Debug C$:\Dev\Estudos$ -$ DEV\c_cpp\NullBattle\core\battle\TurnEngine.cpp || cmake_object_order_depends_target_NullBattle
+  CONFIG = Debug
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  OBJECT_DIR = CMakeFiles\NullBattle.dir
+  OBJECT_FILE_DIR = CMakeFiles\NullBattle.dir\core\battle
+  TARGET_COMPILE_PDB = CMakeFiles\NullBattle.dir\
+  TARGET_PDB = NullBattle.pdb
+  TARGET_SUPPORT_DIR = CMakeFiles\NullBattle.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target NullBattle
@@ -75,7 +84,7 @@ build CMakeFiles\NullBattle.dir\core\battle\BattleStateMachine.cpp.obj: CXX_COMP
 #############################################
 # Link the executable NullBattle.exe
 
-build NullBattle.exe: CXX_EXECUTABLE_LINKER__NullBattle_Debug CMakeFiles\NullBattle.dir\NullBattle.cpp.obj CMakeFiles\NullBattle.dir\core\battle\BattleStateMachine.cpp.obj
+build NullBattle.exe: CXX_EXECUTABLE_LINKER__NullBattle_Debug CMakeFiles\NullBattle.dir\NullBattle.cpp.obj CMakeFiles\NullBattle.dir\core\battle\BattleStateMachine.cpp.obj CMakeFiles\NullBattle.dir\core\battle\TurnEngine.cpp.obj
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
