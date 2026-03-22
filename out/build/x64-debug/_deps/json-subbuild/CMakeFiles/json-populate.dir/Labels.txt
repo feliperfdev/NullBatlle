@@ -1,0 +1,14 @@
+# Target labels
+ json-populate
+# Source files and their labels
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/CMakeFiles/json-populate
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/CMakeFiles/json-populate.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/CMakeFiles/json-populate-complete.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-build.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-configure.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-download.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-install.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-mkdir.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-patch.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-test.rule
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-subbuild/json-populate-prefix/src/json-populate-stamp/json-populate-update.rule

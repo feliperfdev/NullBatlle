@@ -1,4 +1,5 @@
 ﻿#include "NullBattle.h"
+#include <DataLoader.hpp>
 
 void runPlayersActions(BattleStateMachine& engine) {
 
@@ -26,35 +27,41 @@ int main()
 {
 	setlocale(LC_ALL, "Portuguese");
 
-	BattleStateMachine battleEngine = BattleStateMachine(
-		{
-			Pokemon {
-				"Charmander",
-				5,
-				20,
-				{ Types::FIRE },
-				{ 20, 0, 0, 0, 0, 0 },
-				0,
-				{ Move{{15, 15}, 7, 0, 1, Types::NORMAL, "Tackle"} }
-			}
-		},
+	try {
+		DataLoader dataLoader = DataLoader();
+
+		auto movesMap = dataLoader.loadMoves();
+		auto pokemonList = dataLoader.loadPokemon();
+
+		PokemonTemplate& tmpl1 = pokemonList[0];
+		PokemonTemplate& tmpl2 = pokemonList[3];
+
+		Pokemon bulbasaur = tmpl1.build(
+			5,
+			{ "tackle", "growl", "vine-whip", "razor-leaf" },
+			movesMap
+		);
+
+		Pokemon charmander = tmpl2.build(
+			5,
+			{ "tackle", "growl", "ember", "flamethrower" },
+			movesMap
+		);
+
+
+		BattleStateMachine battleEngine = BattleStateMachine(
+			{
+				bulbasaur
+			},
 
 		{
-			Pokemon{
-				"Bulbasaur",
-				5,
-				20,
-				{ Types::GRASS },
-				{ 20, 0, 0, 0, 0, 0 },
-				0,
-				{ Move{{20, 20}, 6, 0, 1, Types::NORMAL, "Scratch"} }
-			}
+			charmander
 		}
-	);
+		);
 
-	while (!battleEngine.gameHasWinner()) {
+		while (!battleEngine.gameHasWinner()) {
 
-		switch (battleEngine.getState()) {
+			switch (battleEngine.getState()) {
 			case BattleState::ACTION_TURN:
 				runPlayersActions(battleEngine);
 
@@ -69,7 +76,11 @@ int main()
 
 				break;
 
+			}
 		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Erro: " << e.what() << std::endl;
 	}
 
 	return 0;

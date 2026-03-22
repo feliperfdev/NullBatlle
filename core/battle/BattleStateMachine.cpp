@@ -1,7 +1,7 @@
 #include "BattleStateMachine.hpp"
 
 std::string printPokemonData(Pokemon pokemon) {
-	return "{name: " + pokemon.name + ", moves: " + std::to_string(pokemon.moves.size())
+	return "{name: " + pokemon.name + ", level: " + std::to_string(pokemon.level) + ", moves: " + std::to_string(pokemon.moves.size())
 		+ ", stats: " + "{" +
 		std::to_string(pokemon.stats[0]) + ", " +
 		std::to_string(pokemon.stats[1]) + ", " +

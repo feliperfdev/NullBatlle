@@ -1,8 +1,8 @@
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/NullBattle.dir
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/edit_cache.dir
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
-C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build/CMakeFiles/edit_cache.dir
-C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build/CMakeFiles/rebuild_cache.dir
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-build/CMakeFiles/edit_cache.dir
+C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-build/CMakeFiles/rebuild_cache.dir
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/CMakeFiles/nullbattle_core.dir
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/CMakeFiles/edit_cache.dir
 C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/CMakeFiles/rebuild_cache.dir

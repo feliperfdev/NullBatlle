@@ -4,6 +4,7 @@
 #include <fstream>
 #include <utility>
 #include <vector>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include "../core/models/Move.hpp"
 #include "../core/models/Pokemon.hpp"
@@ -14,6 +15,9 @@ using json = nlohmann::json;
 class DataLoader {
 
 	public:
-		std::vector<Move> loadMoves();
+		std::map<std::string, Move> loadMoves();
 		std::vector<PokemonTemplate> loadPokemon();
+
+	private:
+		void log(std::string text);
 };

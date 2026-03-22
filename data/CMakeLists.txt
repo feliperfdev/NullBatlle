@@ -4,6 +4,10 @@ add_library(nullbattle_data
 
 target_include_directories(nullbattle_data PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+target_compile_definitions(nullbattle_data PRIVATE
+    DATA_PATH="${CMAKE_SOURCE_DIR}/data/"
+)
+
 target_link_libraries(nullbattle_data
     PRIVATE nlohmann_json::nlohmann_json
     PUBLIC  nullbattle_core

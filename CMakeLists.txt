@@ -14,28 +14,21 @@ project ("NullBattle")
 # Add source to this project's executable.
 add_executable(NullBattle "NullBattle.cpp" "NullBattle.h")
 
+include(FetchContent)
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
 target_link_libraries(NullBattle PRIVATE
     nullbattle_core
     nullbattle_data
+    nlohmann_json::nlohmann_json
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET NullBattle PROPERTY CXX_STANDARD 20)
 endif()
 
-# TODO: Add tests and install targets if needed.
-
-include(FetchContent)
-
-include(FetchContent)
-
-FetchContent_Declare(
-    nlohmann_json
-    GIT_REPOSITORY https://github.com/nlohmann/json.git
-    GIT_TAG        v3.11.3
-)
-
-FetchContent_MakeAvailable(nlohmann_json)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build/cmake_install.cmake")
+  include("C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-build/cmake_install.cmake")
   include("C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/core/cmake_install.cmake")
   include("C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/data/cmake_install.cmake")
   include("C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/ui/cmake_install.cmake")

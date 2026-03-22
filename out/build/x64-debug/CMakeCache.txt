@@ -278,11 +278,18 @@ FETCHCONTENT_FULLY_DISCONNECTED:BOOL=OFF
 FETCHCONTENT_QUIET:BOOL=ON
 
 //When not empty, overrides where to find pre-populated content
+// for json
+FETCHCONTENT_SOURCE_DIR_JSON:PATH=
+
+//When not empty, overrides where to find pre-populated content
 // for nlohmann_json
 FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON:PATH=
 
 //Enables UPDATE_DISCONNECTED behavior for all content population
 FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
+
+//Enables UPDATE_DISCONNECTED behavior just for population of json
+FETCHCONTENT_UPDATES_DISCONNECTED_JSON:BOOL=OFF
 
 //Enables UPDATE_DISCONNECTED behavior just for population of nlohmann_json
 FETCHCONTENT_UPDATES_DISCONNECTED_NLOHMANN_JSON:BOOL=OFF
@@ -296,13 +303,16 @@ JSON_BuildTests:BOOL=OFF
 //Enable CI build targets.
 JSON_CI:BOOL=OFF
 
+//Enable diagnostic positions.
+JSON_Diagnostic_Positions:BOOL=OFF
+
 //Use extended diagnostic messages.
 JSON_Diagnostics:BOOL=OFF
 
 //Disable default integer enum serialization.
 JSON_DisableEnumSerialization:BOOL=OFF
 
-//Place use-defined string literals in the global namespace.
+//Place user-defined string literals in the global namespace.
 JSON_GlobalUDLs:BOOL=ON
 
 //Enable implicit conversions.
@@ -330,13 +340,16 @@ NullBattle_IS_TOP_LEVEL:STATIC=ON
 NullBattle_SOURCE_DIR:STATIC=C:/Dev/Estudos - DEV/c_cpp/NullBattle
 
 //Value Computed by CMake
-nlohmann_json_BINARY_DIR:STATIC=C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-build
+nlohmann_json_BINARY_DIR:STATIC=C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-build
+
+//The directory containing a CMake configuration file for nlohmann_json.
+nlohmann_json_DIR:PATH=nlohmann_json_DIR-NOTFOUND
 
 //Value Computed by CMake
 nlohmann_json_IS_TOP_LEVEL:STATIC=OFF
 
 //Value Computed by CMake
-nlohmann_json_SOURCE_DIR:STATIC=C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-src
+nlohmann_json_SOURCE_DIR:STATIC=C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/json-src
 
 //Dependencies for the target
 nullbattle_data_LIB_DEPENDS:STATIC=general;nullbattle_core;

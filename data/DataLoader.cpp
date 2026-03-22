@@ -1,35 +1,56 @@
 #include "DataLoader.hpp"
 
-std::vector<Move> DataLoader::loadMoves() {
-	std::vector<Move> moves = {};
+std::map<std::string, Move> DataLoader::loadMoves() {
+	std::map<std::string, Move> moves = {};
 
-	std::ifstream f("moves.json");
+	std::ifstream f(std::string(DATA_PATH) + "moves.json");
 	json data = json::parse(f);
 
 	for (auto& move : data.items()) {
 		json object = move.value();
 
-		std::array<int, 2> pp = { object.at("pp"), object.at("pp") };
+		std::array<int, 2> pp = { 0, 0 };
+		if (!object.at("pp").is_null()) {
+			int ppVal = object.at("pp").get<int>();
+			pp = { ppVal, ppVal };
+		}
+
+		unsigned int priority = 0;
+		if (!object.at("priority").is_null()) {
+			int priorVal = object.at("priority").get<int>();
+			priority == priorVal;
+		}
+		unsigned int category = 0;
+		if (!object.at("category").is_null()) {
+			int catVal = object.at("category").get<int>();
+			category == catVal;
+		}
+
 
 		std::optional<int> power = std::nullopt;
 		if (!object.at("power").is_null()) {
-			power = object.at("power").get<int>();
+			power = object["power"];
 		}
 
-		Move mv = { pp, power, object.at("priority"), object.at("category"), typeFromString(object.at("type")), object.at("name") };
+		Move mv = { pp, power, priority, category, typeFromString(object["type"]), object["name"]};
 
-		moves.push_back(mv);
+		moves[object.at("name").get<std::string>()] = mv;
 	}
 
 	return moves;
 }
+
 std::vector<PokemonTemplate> DataLoader::loadPokemon() {
 	std::vector<PokemonTemplate> pokemonTemplate = {};
 
-	std::ifstream f("pokemon.json");
+	std::ifstream f(std::string(DATA_PATH) + "pokemon.json");
 	json data = json::parse(f);
 
+	int pkmnCount = 0;
+
 	for (auto& move : data.items()) {
+		pkmnCount++;
+
 		json object = move.value();
 
 		std::array<Types, 2> types = {};
@@ -62,5 +83,11 @@ std::vector<PokemonTemplate> DataLoader::loadPokemon() {
 		pokemonTemplate.push_back(pkmn);
 	}
 
+	log("Successfully loaded " + std::to_string(pkmnCount) + " Pokemon!");
+
 	return pokemonTemplate;
+}
+
+void DataLoader::log(std::string text) {
+	std::cout << "[DataLoader] " + text << std::endl;
 }
