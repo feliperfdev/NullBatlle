@@ -25,6 +25,9 @@ class BattleStateMachine {
 
 		bool gameHasWinner();
 
+		Pokemon& p1ActivePokemon();
+		Pokemon& p2ActivePokemon();
+
 	private:
 		Player player1;
 		Player player2;

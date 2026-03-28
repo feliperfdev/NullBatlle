@@ -3,21 +3,39 @@
 
 void runPlayersActions(BattleStateMachine& engine) {
 
-	std::cout << "[1] > Faça uma ação: ";
+	Pokemon& p1Pokemon = engine.p1ActivePokemon();
+	Pokemon& p2Pokemon = engine.p2ActivePokemon();
+
+	std::cout << "[Player 1] > Faça uma ação: ";
 
 	int p1Action;
 
 	std::cin >> p1Action;
 
-	engine.player1Action(BattleAction{ ActionTypeMap[p1Action], 0});
+	if (ActionTypeMap[p1Action] == ActionType::USE_MOVE) {
+		std::array<Move, 4> p1PokemonMoves = p1Pokemon.moves;
+
+		for (auto& move : p1PokemonMoves) {
+			std::cout << move.name + " - " + "(" + std::to_string(move.pp.front()) + "/" + std::to_string(move.pp.front()) + ") PP" << std::endl;
+		}
+	}
 
 
-	std::cout << "[2] > Faça uma ação: ";
+	std::cout << "[Player 2] > Faça uma ação: ";
 
 	int p2Action;
 
 	std::cin >> p2Action;
 
+	if (ActionTypeMap[p2Action] == ActionType::USE_MOVE) {
+		std::array<Move, 4> p2PokemonMoves = p2Pokemon.moves;
+
+		for (auto& move : p2PokemonMoves) {
+			std::cout << move.name + " - " + "(" + std::to_string(move.pp.front()) + "/" + std::to_string(move.pp.front()) + ") PP" << std::endl;
+		}
+	}
+
+	engine.player1Action(BattleAction{ ActionTypeMap[p1Action], 0 });
 	engine.player2Action(BattleAction{ ActionTypeMap[p2Action], 0 });
 
 	std::cout << std::endl;

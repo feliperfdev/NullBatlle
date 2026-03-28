@@ -1,4 +1,6 @@
 #include "TurnEngine.hpp"
+#include <random>
+#include <iostream>
 
 TurnEngine::TurnEngine(
 	BattleAction& p1Action,
@@ -7,6 +9,17 @@ TurnEngine::TurnEngine(
 	this->p1Action = p1Action;
 	this->p2Action = p2Action;
 	log("Started Turn Engine!");
+}
+
+int generateRandom(int max) {
+	std::random_device seed;
+	std::mt19937 gen{ seed() };
+
+	std::uniform_int_distribution<int> dist(1, max);
+
+	int random_num = dist(gen);
+
+	return random_num;
 }
 
 int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
@@ -49,6 +62,12 @@ int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
 		else {
 			if (p1Speed > p2Speed) { whoActsFirst = 1; } else { whoActsFirst = 2; }
 		}
+
+		int p1Accuracy = p1UsedMove.accuracy;
+		int p2Accuracy = p2UsedMove.accuracy;
+
+		int T1 = p1Accuracy * generateRandom(100);
+		int T2 = p2Accuracy * generateRandom(100);
 	}
 
 	return whoActsFirst;

@@ -26,13 +26,19 @@ std::map<std::string, Move> DataLoader::loadMoves() {
 			category == catVal;
 		}
 
+		unsigned int accuracy = 0;
+		if (!object.at("accuracy").is_null()) {
+			int accVal = object.at("accuracy").get<int>();
+			accuracy == accVal;
+		}
+
 
 		std::optional<int> power = std::nullopt;
 		if (!object.at("power").is_null()) {
 			power = object["power"];
 		}
 
-		Move mv = { pp, power, priority, category, typeFromString(object["type"]), object["name"]};
+		Move mv = { pp, power, priority, accuracy, category, typeFromString(object["type"]), object["name"]};
 
 		moves[object.at("name").get<std::string>()] = mv;
 	}

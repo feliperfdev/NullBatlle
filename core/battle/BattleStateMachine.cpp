@@ -109,3 +109,6 @@ void BattleStateMachine::log(std::string text) {
 	std::cout << "[" + BattleStateMap[getState()] + "] > ";
 	std::cout << text << std::endl;
 }
+
+Pokemon& BattleStateMachine::p1ActivePokemon() { return player1.team.inBattle(); }
+Pokemon& BattleStateMachine::p2ActivePokemon() { return player2.team.inBattle(); }

@@ -4,7 +4,6 @@
 #include "../../core/models/Pokemon.hpp"
 #include "../../core/models/Move.hpp"
 #include <array>
-
 struct PokemonTemplate {
     int id;
     std::string name;
@@ -19,6 +18,16 @@ struct PokemonTemplate {
             const std::map<std::string, Move>& movesMap
         ) const {
             std::array<Move, 4> moves = {};
+
+            for (int i = 0; i < moves.size(); i++) {
+                std::string moveName = moveNames[i];
+
+                Move move = movesMap.at(moveName);
+
+                if (move.name == moveName) {
+                    moves[i] = move;
+                }
+            }
 
             return Pokemon{ name, level, baseStats[0], types, baseStats, 0, moves };
         }

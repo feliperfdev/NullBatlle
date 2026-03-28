@@ -13,6 +13,8 @@ struct Move
 
 	unsigned int priority;
 
+	unsigned int accuracy;
+
 	// 0 = Default; 1 = Físico ; 2 = Especial
 	unsigned int category;
 
