@@ -18,18 +18,18 @@ std::map<std::string, Move> DataLoader::loadMoves() {
 		unsigned int priority = 0;
 		if (!object.at("priority").is_null()) {
 			int priorVal = object.at("priority").get<int>();
-			priority == priorVal;
+			priority = priorVal;
 		}
 		unsigned int category = 0;
 		if (!object.at("category").is_null()) {
 			int catVal = object.at("category").get<int>();
-			category == catVal;
+			category = catVal;
 		}
 
 		unsigned int accuracy = 0;
 		if (!object.at("accuracy").is_null()) {
 			int accVal = object.at("accuracy").get<int>();
-			accuracy == accVal;
+			accuracy = accVal;
 		}
 
 

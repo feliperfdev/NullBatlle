@@ -1,14 +1,37 @@
 #include "BattleStateMachine.hpp"
 
-std::string printPokemonData(Pokemon pokemon) {
-	return "{name: " + pokemon.name + ", level: " + std::to_string(pokemon.level) + ", moves: " + std::to_string(pokemon.moves.size())
-		+ ", stats: " + "{" +
-		std::to_string(pokemon.stats[0]) + ", " +
-		std::to_string(pokemon.stats[1]) + ", " +
-		std::to_string(pokemon.stats[2]) + ", " +
-		std::to_string(pokemon.stats[3]) + ", " +
-		std::to_string(pokemon.stats[4]) + ", " +
-		std::to_string(pokemon.stats[5]) + "}}";
+std::string printPokemonData(const Pokemon& pokemon) {
+	std::string hpBar = "";
+	int barLength = 20;
+	float hpRatio = (float)pokemon.currentHP / (float)pokemon.maxHP();
+	int filled = (int)(hpRatio * barLength);
+
+	for (int i = 0; i < barLength; i++) {
+		hpBar += (i < filled) ? "=" : "-";
+	}
+
+	std::string condition = "OK";
+	if (pokemon.isBurned())    condition = "BRN";
+	if (pokemon.isPoisoned())  condition = "PSN";
+	if (pokemon.isParalyzed()) condition = "PAR";
+	if (pokemon.isAsleep())    condition = "SLP";
+	if (pokemon.isFreezed())   condition = "FRZ";
+
+	std::string result = "";
+	result += "\n[-----------------------------------]\n";
+	result += "| " + pokemon.name + " (Lv." + std::to_string(pokemon.level) + ")  [" + condition + "]\n";
+	result += "| HP: [" + hpBar + "] " + std::to_string(pokemon.currentHP) + "/" + std::to_string(pokemon.maxHP()) + "\n";
+	result += "| ATK:" + std::to_string(pokemon.attack()) +
+		"  DEF:" + std::to_string(pokemon.defense()) +
+		"  SPE:" + std::to_string(pokemon.speed()) + "\n";
+	result += "| Moves: ";
+	for (auto& m : pokemon.moves) {
+		result += m.name + "(" + std::to_string(m.pp[0]) + "/" + std::to_string(m.pp[1]) + ") ";
+	}
+	result += "\n";
+	result += "[-----------------------------------]";
+
+	return result;
 }
 
 BattleStateMachine::BattleStateMachine(
@@ -73,10 +96,30 @@ void BattleStateMachine::executeTurnActions() {
 
 	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
 
+	Pokemon& p1Poke = player1.team.inBattle();
+	Pokemon& p2Poke = player2.team.inBattle();
+
 	int order = turnEngine.determineOrder(
-		player1.team.inBattle(),
-		player2.team.inBattle()
+		p1Poke,
+		p2Poke
 	);
+
+	Move& selectedMoveP1 = p1Poke.moves.at(p1Action.value().index);
+	Move& selectedMoveP2 = p2Poke.moves.at(p1Action.value().index);
+
+	if (order == 1) {
+		log(p1Poke.name + " vai primeiro!");
+		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
+		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
+	}
+	else {
+		log(p2Poke.name + " vai primeiro!");
+		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
+		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
+	}
+
+	log(printPokemonData(p1Poke));
+	log(printPokemonData(p2Poke));
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {

@@ -1,6 +1,14 @@
 ﻿#include "NullBattle.h"
 #include <DataLoader.hpp>
 
+void printMoves(Pokemon& pokemon) {
+	std::array<Move, 4> pokemonMoves = pokemon.moves;
+
+	for (auto& move : pokemonMoves) {
+		std::cout << move.name + " - " + "(" + std::to_string(move.pp.front()) + "/" + std::to_string(move.pp.front()) + ") PP" << std::endl;
+	}
+}
+
 void runPlayersActions(BattleStateMachine& engine) {
 
 	Pokemon& p1Pokemon = engine.p1ActivePokemon();
@@ -12,13 +20,7 @@ void runPlayersActions(BattleStateMachine& engine) {
 
 	std::cin >> p1Action;
 
-	if (ActionTypeMap[p1Action] == ActionType::USE_MOVE) {
-		std::array<Move, 4> p1PokemonMoves = p1Pokemon.moves;
-
-		for (auto& move : p1PokemonMoves) {
-			std::cout << move.name + " - " + "(" + std::to_string(move.pp.front()) + "/" + std::to_string(move.pp.front()) + ") PP" << std::endl;
-		}
-	}
+	if (ActionTypeMap[p1Action] == ActionType::USE_MOVE) { printMoves(p1Pokemon); }
 
 
 	std::cout << "[Player 2] > Faça uma ação: ";
@@ -27,13 +29,7 @@ void runPlayersActions(BattleStateMachine& engine) {
 
 	std::cin >> p2Action;
 
-	if (ActionTypeMap[p2Action] == ActionType::USE_MOVE) {
-		std::array<Move, 4> p2PokemonMoves = p2Pokemon.moves;
-
-		for (auto& move : p2PokemonMoves) {
-			std::cout << move.name + " - " + "(" + std::to_string(move.pp.front()) + "/" + std::to_string(move.pp.front()) + ") PP" << std::endl;
-		}
-	}
+	if (ActionTypeMap[p2Action] == ActionType::USE_MOVE) { printMoves(p2Pokemon); }
 
 	engine.player1Action(BattleAction{ ActionTypeMap[p1Action], 0 });
 	engine.player2Action(BattleAction{ ActionTypeMap[p2Action], 0 });

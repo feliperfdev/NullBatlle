@@ -48,4 +48,10 @@ struct Pokemon
 				isPoisoned() || isFreezed() || isConfused() ||
 				isAttracted();
 		}
+
+		void receiveDamage(int damage) {
+			if (currentHP > 0) {
+				currentHP -= damage;
+			}
+		}
 };

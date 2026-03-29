@@ -62,12 +62,6 @@ int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
 		else {
 			if (p1Speed > p2Speed) { whoActsFirst = 1; } else { whoActsFirst = 2; }
 		}
-
-		int p1Accuracy = p1UsedMove.accuracy;
-		int p2Accuracy = p2UsedMove.accuracy;
-
-		int T1 = p1Accuracy * generateRandom(100);
-		int T2 = p2Accuracy * generateRandom(100);
 	}
 
 	return whoActsFirst;
@@ -76,20 +70,40 @@ int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
 void TurnEngine::executeMoveAction(
 	Pokemon& attacker,
 	Pokemon& defender,
-	Move move
+	Move& move
 ) {
-	if (move.isDamageMove()) {
-		unsigned int attackerAtkPoints = move.power.value();
+	if (move.canUseMove()) {
 
-		unsigned int dano = (((2 * attacker.level / 5 + 2) * move.power.value() * attacker.attack() / defender.defense()) / 50 + 2);
+		int roll = generateRandom(100);
 
-		if (defender.currentHP - attackerAtkPoints <= 0) {
-			defender = Pokemon{ defender.name, defender.level, 0, defender.types, defender.stats, defender.battleCondition, defender.moves };
+		bool moveHits = (roll <= move.accuracy) || (move.accuracy == 0);
+
+		if (moveHits) {
+			move.useMove();
 		}
 		else {
-			unsigned int defenderLoseHP = defender.currentHP - attackerAtkPoints;
+			log("Pokémon " + attacker.name + " attack's missed!");
+			return;
+		}
 
-			defender = Pokemon{ defender.name, defender.level, defenderLoseHP, defender.types, defender.stats, defender.battleCondition, defender.moves };
+		log("Pokémon " + attacker.name + " used " + move.name + "!");
+
+		if (move.isDamageMove()) {
+			unsigned int attackerAtkPoints = move.power.value();
+
+			unsigned int dano = (((2 * attacker.level / 5 + 2) * attackerAtkPoints * attacker.attack() / defender.defense()) / 50 + 2);
+
+			if (defender.currentHP - dano <= 0) {
+				defender.receiveDamage(dano);
+
+				log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
+				log("Pokémon " + defender.name + " was defeated!");
+			}
+			else {
+				defender.receiveDamage(dano);
+
+				log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
+			}
 		}
 	}
 }

@@ -27,7 +27,7 @@ class TurnEngine {
 		void executeMoveAction(
 			Pokemon& attacker,
 			Pokemon& defender,
-			Move move
+			Move& move
 		);
 
 		void executeItemAction(
