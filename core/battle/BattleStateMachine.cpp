@@ -99,8 +99,8 @@ void BattleStateMachine::executeTurnActions() {
 
 	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
 
-	Pokemon& p1Poke = player1.team.inBattle();
-	Pokemon& p2Poke = player2.team.inBattle();
+	Pokemon& p1Poke = p1ActivePokemon();
+	Pokemon& p2Poke = p2ActivePokemon();
 
 	int order = turnEngine.determineOrder(
 		p1Poke,
@@ -135,7 +135,7 @@ void BattleStateMachine::executeTurnActions() {
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {
 	int count = 0;
-	for (auto& p : playerTeam) { if (p.currentHP == 0) { count++; } }
+	for (auto& p : playerTeam) { if (!p.isNotDefeated()) { count++; } }
 
 	return count == playerTeam.size();
 }
