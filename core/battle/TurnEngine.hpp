@@ -32,7 +32,7 @@ class TurnEngine {
 
 		void executeItemAction(
 			Pokemon& itemReceiver,
-			Item item
+			Item& item
 		);
 
 	private:

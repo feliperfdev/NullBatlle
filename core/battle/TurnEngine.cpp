@@ -109,6 +109,13 @@ void TurnEngine::executeMoveAction(
 	}
 }
 
+void TurnEngine::executeItemAction(
+	Pokemon& itemReceiver,
+	Item& item
+) {
+
+}
+
 void TurnEngine::log(std::string text) {
 	std::cout << "[TurnEngine] " + text << std::endl;
 }

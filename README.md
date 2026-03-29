@@ -1,6 +1,6 @@
 # NullBattle
 
-A turn-based Pokémon battle engine written in C++17, faithfully replicating Generation 3 mechanics — damage formula, type effectiveness, speed/priority ordering, and status conditions.
+A turn-based Pokémon battle engine written in C++17, replicating Generation 3 mechanics — damage formula, type effectiveness, speed/priority ordering, and status conditions.
 
 ---
 
@@ -30,7 +30,7 @@ NullBattle is a from-scratch battle simulator that loads all 386 Gen 1–3 Poké
 
 On startup, `DataLoader` reads two JSON files and populates in-memory maps:
 
-- **`moves.json`** → `std::map<std::string, Move>` — all Gen 1–3 moves with PP, power, priority, category, and type.
+- **`moves.json`** → `std::map<std::string, Move>` — all Gen 1–3 moves with PP, power, priority, category, accuracy, and type.
 - **`pokemon.json`** → `std::vector<PokemonTemplate>` — all 386 Pokémon with base stats and learnsets.
 
 Each `PokemonTemplate` exposes a `build(level, moveNames, movesMap)` factory that creates a live `Pokemon` instance with scaled stats and an assigned moveset.
@@ -69,11 +69,15 @@ Each player submits a `BattleAction` (Use Move / Switch Pokémon / Use Item) bef
 damage = floor((floor(2 * level / 5 + 2) * power * attack / defense) / 50) + 2
 ```
 
-Where `attack` and `defense` are the relevant stats depending on move category (Physical uses Atk/Def; Special uses SpAtk/SpDef). The result is subtracted from `defender.currentHP`, clamped at 0.
+The formula is implemented. Currently `attack` and `defense` always resolve to the Physical stats (Atk/Def); the Special branch (SpAtk/SpDef for `category == 2`) is not yet wired in.
 
-**Planned modifiers:** STAB (×1.5), type effectiveness (from `typechart.json`), critical hits, random roll (0.85–1.00), and burn halving.
+**Not yet implemented:** STAB (×1.5), type effectiveness, critical hits, random damage roll (0.85–1.00), and burn halving.
 
-### 5. Status Conditions
+### 5. Accuracy
+
+Before damage is applied, `TurnEngine::executeMoveAction()` rolls a value from 1–100 and compares it against `move.accuracy`. A move with `accuracy == 0` always hits.
+
+### 6. Status Conditions
 
 The `Pokemon` struct tracks `battleCondition` as an integer flag:
 
@@ -88,11 +92,11 @@ The `Pokemon` struct tracks `battleCondition` as an integer flag:
 | 6 | Confusion |
 | 7 | Attraction |
 
-End-of-turn effects (burn chip damage, poison damage, sleep counter, paralysis speed drop) are handled by `StatusManager` — structure is defined, full implementation is in progress.
+Status flags are stored and query helpers (`isBurned()`, `isParalyzed()`, etc.) are implemented on `Pokemon`. End-of-turn effects (burn chip damage, poison damage, sleep counter, paralysis speed drop) and a dedicated `StatusManager` are not yet implemented.
 
-### 6. Type Effectiveness
+### 7. Type Effectiveness
 
-`typechart.json` stores the full 18×18 Gen 3 effectiveness matrix. Integration into the damage calculator is planned.
+`typechart.json` stores the full 18×18 Gen 3 effectiveness matrix. The `Types` enum and string-to-type conversion (`typeFromString()`) are implemented in `Types.hpp`. Integration into the damage calculator is planned.
 
 ---
 
@@ -107,18 +111,18 @@ NullBattle/
 ├── core/                   # Pure battle logic — no UI dependency
 │   ├── CMakeLists.txt      # Builds nullbattle_core static library
 │   ├── battle/
-│   │   ├── BattleState.hpp           # State enum
-│   │   ├── BattleAction.hpp          # Action struct (type + index)
+│   │   ├── BattleState.hpp              # State enum + string map
+│   │   ├── BattleAction.hpp             # ActionType enum + BattleAction struct
 │   │   ├── BattleStateMachine.hpp/.cpp  # State transitions and main loop
-│   │   └── TurnEngine.hpp/.cpp       # Turn ordering and damage application
+│   │   └── TurnEngine.hpp/.cpp          # Turn ordering and damage application
 │   └── models/
-│       ├── Pokemon.hpp     # Stats, HP, types, moves, battle condition
-│       ├── Move.hpp        # PP, power, priority, category, type
+│       ├── Pokemon.hpp     # Stats, HP, types, moves, battle condition + accessors
+│       ├── Move.hpp        # PP, power, priority, accuracy, category, type
 │       ├── Team.hpp        # party[6], active index, defeated flags
 │       ├── Player.hpp      # ID, team, bag
-│       ├── Item.hpp        # Name, heal effect, HP restored
+│       ├── Item.hpp        # Name, itemType, healEffect, healHP
 │       ├── Bag.hpp         # items[100]
-│       └── Types.hpp       # 18-type enum (Gen 3)
+│       └── Types.hpp       # 19-value type enum (Gen 3 + FAIRY + NONE) and TypesMap
 │
 ├── data/                   # JSON loading — depends on core
 │   ├── CMakeLists.txt      # Builds nullbattle_data static library
@@ -127,7 +131,7 @@ NullBattle/
 │   │   ├── PokemonTemplate.hpp  # Template + build() factory
 │   │   └── LearnsetEntry.hpp    # Move name + learn level
 │   ├── pokemon.json        # 386 Pokémon — base stats and learnsets
-│   ├── moves.json          # Gen 1–3 moves — power, PP, category, type
+│   ├── moves.json          # Gen 1–3 moves — power, PP, category, accuracy, type
 │   └── typechart.json      # 18×18 type effectiveness matrix (Gen 3)
 │
 ├── ui/                     # Dear ImGui layer — reads state, never mutates
@@ -206,11 +210,17 @@ Categories: `1` = Physical, `2` = Special, `0` = Status
 | Core domain models | Done |
 | Battle state machine | Done |
 | Turn ordering (speed + priority) | Done |
-| Gen 3 damage formula | Done |
-| Type effectiveness in damage | Planned |
+| Accuracy roll | Done |
+| Gen 3 damage formula (base) | Done |
+| Physical vs Special stat selection | Planned |
 | STAB modifier | Planned |
+| Type effectiveness in damage | Planned |
 | Critical hits | Planned |
-| Status condition effects (end-of-turn) | In progress |
-| Item system | In progress |
+| Random damage roll (0.85–1.00) | Planned |
+| Burn halving attack in damage | Planned |
+| Status condition flags + query helpers | Done |
+| Status condition effects (end-of-turn) | Planned |
+| Item data structures | Done |
+| Item usage in battle | Planned |
 | UI (Dear ImGui) | Planned |
 | Unit tests (Catch2) | Planned |

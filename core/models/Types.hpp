@@ -27,7 +27,7 @@ inline std::map<std::string, Types> TypesMap = {
 	{"water",    Types::WATER},
 	{"normal",     Types::NORMAL},
 	{"electric",    Types::ELECTRIC},
-	{"dark",    Types::ELECTRIC},
+	{"dark",    Types::DARK},
 	{"poison",     Types::POISON},
 	{"flying",    Types::FLYING},
 	{"fighting",    Types::FIGHTING},

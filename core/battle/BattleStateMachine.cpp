@@ -108,7 +108,7 @@ void BattleStateMachine::executeTurnActions() {
 	);
 
 	Move& selectedMoveP1 = p1Poke.moves.at(p1Action.value().index);
-	Move& selectedMoveP2 = p2Poke.moves.at(p1Action.value().index);
+	Move& selectedMoveP2 = p2Poke.moves.at(p2Action.value().index);
 
 	if (order == 1) {
 		log(p1Poke.name + " vai primeiro!");
