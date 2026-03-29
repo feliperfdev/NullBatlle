@@ -28,6 +28,8 @@ class BattleStateMachine {
 		Pokemon& p1ActivePokemon();
 		Pokemon& p2ActivePokemon();
 
+		Player winnerPlayer;
+
 	private:
 		Player player1;
 		Player player2;

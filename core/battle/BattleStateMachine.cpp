@@ -62,12 +62,15 @@ BattleState BattleStateMachine::getState() const { return currentState; }
 void BattleStateMachine::checkWinner() {
 	if (isOver(player1.team.party)) {
 		winnerId = player2.id;
+		winnerPlayer = player2;
 		currentState = BattleState::BATTLE_END;
 	}
 	else if (isOver(player2.team.party)) {
 		winnerId = player1.id;
+		winnerPlayer = player1;
 		currentState = BattleState::BATTLE_END;
 	}
+
 }
 
 int BattleStateMachine::getWinner() { return winnerId; }
@@ -118,8 +121,16 @@ void BattleStateMachine::executeTurnActions() {
 		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
 	}
 
+	currentState = BattleState::END_TURN;
+
 	log(printPokemonData(p1Poke));
 	log(printPokemonData(p2Poke));
+
+	checkWinner();
+
+	if (!gameHasWinner()) {
+		currentState = BattleState::ACTION_TURN;
+	}
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {

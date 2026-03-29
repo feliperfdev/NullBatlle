@@ -80,30 +80,31 @@ void TurnEngine::executeMoveAction(
 
 		if (moveHits) {
 			move.useMove();
+
+			log("Pokémon " + attacker.name + " used " + move.name + "!");
+
+			if (move.isDamageMove()) {
+				unsigned int attackerAtkPoints = move.power.value();
+
+				unsigned int dano = (((2 * attacker.level / 5 + 2) * attackerAtkPoints * attacker.attack() / defender.defense()) / 50 + 2);
+
+				if (dano > defender.currentHP) {
+					defender.currentHP = 0;
+
+					log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
+					log("Pokémon " + defender.name + " was defeated!");
+				}
+				else {
+					defender.receiveDamage(dano);
+
+					log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
+				}
+			}
 		}
+		// Errou o move
 		else {
 			log("Pokémon " + attacker.name + " attack's missed!");
 			return;
-		}
-
-		log("Pokémon " + attacker.name + " used " + move.name + "!");
-
-		if (move.isDamageMove()) {
-			unsigned int attackerAtkPoints = move.power.value();
-
-			unsigned int dano = (((2 * attacker.level / 5 + 2) * attackerAtkPoints * attacker.attack() / defender.defense()) / 50 + 2);
-
-			if (defender.currentHP - dano <= 0) {
-				defender.receiveDamage(dano);
-
-				log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
-				log("Pokémon " + defender.name + " was defeated!");
-			}
-			else {
-				defender.receiveDamage(dano);
-
-				log("Pokémon " + defender.name + " will receive " + std::to_string(dano) + " HP of damage!");
-			}
 		}
 	}
 }
