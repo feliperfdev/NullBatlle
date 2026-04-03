@@ -1,6 +1,8 @@
 #include "pokemon_print_helpers.hpp"
 
 std::string printPokemonData(const Pokemon& pokemon) {
+	if (pokemon.name.empty() || pokemon.level == 0) return "";
+
 	std::string hpBar = "";
 	int barLength = 20;
 	float hpRatio = (float)pokemon.currentHP / (float)pokemon.maxHP();

@@ -103,20 +103,20 @@ void forceSwitchActivePokemon(Player& player) {
 
 	unsigned int partyIndex = 0;
 
+	for (auto& poke : player.team.party) {
+		std::cout << printPokemonData(poke) << std::endl;
+	}
+
 	std::cout << "[Player " + std::to_string(player.id) + "] Escolha o index do pokémon do " +
 		"seu time para substituir por " + player.team.inBattle().name + ": ";
 
 	std::cin >> pokemonIndex;
 
-	if (pokemonIndex > player.team.party.size() || pokemonIndex <= 0) {
-		forceSwitchActivePokemon(player);
-	}
-
-	auto chosenPokemon = player.team.party.at(pokemonIndex);
+	auto chosenPokemon = player.team.party[pokemonIndex];
 
 	log("Pokémon escolhido: " + chosenPokemon.name);
 
-	player.team.switchActivePokemon(pokemonIndex - 1);
+	player.team.switchActivePokemon(pokemonIndex);
 }
 
 int main()

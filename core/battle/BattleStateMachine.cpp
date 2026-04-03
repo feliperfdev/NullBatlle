@@ -94,9 +94,8 @@ void BattleStateMachine::executeTurnActions() {
 		if (whoWillSwitchPokemon > 0) {
 			currentState = BattleState::SWITCH_AFTER_FAINT;
 		}
-		else {
-			currentState = BattleState::ACTION_TURN;
-		}
+		
+		currentState = BattleState::ACTION_TURN;
 	}
 }
 
