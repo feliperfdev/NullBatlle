@@ -1,65 +1,23 @@
 #include "BattleStateMachine.hpp"
 
-std::string printPokemonData(const Pokemon& pokemon) {
-	std::string hpBar = "";
-	int barLength = 20;
-	float hpRatio = (float)pokemon.currentHP / (float)pokemon.maxHP();
-	int filled = (int)(hpRatio * barLength);
-
-	for (int i = 0; i < barLength; i++) {
-		hpBar += (i < filled) ? "=" : "-";
-	}
-
-	std::string condition = "OK";
-	if (pokemon.isBurned())    condition = "BRN";
-	if (pokemon.isPoisoned())  condition = "PSN";
-	if (pokemon.isParalyzed()) condition = "PAR";
-	if (pokemon.isAsleep())    condition = "SLP";
-	if (pokemon.isFreezed())   condition = "FRZ";
-
-	std::string result = "";
-	result += "\n[-----------------------------------]\n";
-	result += "| " + pokemon.name + " (Lv." + std::to_string(pokemon.level) + ")  [" + condition + "]\n";
-	result += "| HP: [" + hpBar + "] " + std::to_string(pokemon.currentHP) + "/" + std::to_string(pokemon.maxHP()) + "\n";
-	result += "| ATK:" + std::to_string(pokemon.attack()) +
-		"  DEF:" + std::to_string(pokemon.defense()) +
-		"  SPE:" + std::to_string(pokemon.speed()) + "\n";
-	result += "| Moves: ";
-	for (auto& m : pokemon.moves) {
-		result += m.name + "(" + std::to_string(m.pp[0]) + "/" + std::to_string(m.pp[1]) + ") ";
-	}
-	result += "\n";
-	result += "[-----------------------------------]";
-
-	return result;
-}
-
 BattleStateMachine::BattleStateMachine(
-	const std::array<Pokemon, 6>& myTeam,
-	const std::array<Pokemon, 6>& opositeTeam
+	Player& player1, Player& player2
 ) : currentState(BattleState::TEAM_SELECT), winnerId(0) {
-	player1.id = 1;
-	player1.team.party = myTeam;
-	player1.team.defeated = getDefeatedPokemon(myTeam);
-	getActivePokemon(player1.team);
+	this->player1 = player1;
+	this->player2 = player2;
 
 	log("Initialized Player 1 team: " + printPokemonData(player1.team.party[0]));
-
-	player2.id = 2;
-	player2.team.party = opositeTeam;
-	player2.team.defeated = getDefeatedPokemon(opositeTeam);
-	getActivePokemon(player2.team);
 
 	log("Initialized Player 2 team: " + printPokemonData(player2.team.party[0]));
 
 	currentState = BattleState::ACTION_TURN;
-
-	log("Starting battle...");
 }
 
 BattleState BattleStateMachine::getState() const { return currentState; }
 
 void BattleStateMachine::checkWinner() {
+	log("Checando se há vencedor...");
+
 	if (isOver(player1.team.party)) {
 		winnerId = player2.id;
 		winnerPlayer = player2;
@@ -95,8 +53,6 @@ void BattleStateMachine::executeTurnActions() {
 
 	currentState = BattleState::ACTION_EXECUTING_TURN;
 
-	log("Entrando em modo de execução do turno...");
-
 	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
 
 	Pokemon& p1Poke = p1ActivePokemon();
@@ -129,34 +85,43 @@ void BattleStateMachine::executeTurnActions() {
 	checkWinner();
 
 	if (!gameHasWinner()) {
-		currentState = BattleState::ACTION_TURN;
+
+		bool p1NeedsToSwitch = playerNeedsToSwitch(player1);
+		bool p2NeedsToSwitch = playerNeedsToSwitch(player2);
+
+		whoWillSwitchPokemon = p1NeedsToSwitch ? 1 : (p2NeedsToSwitch ? 2 : 0);
+
+		if (whoWillSwitchPokemon > 0) {
+			currentState = BattleState::SWITCH_AFTER_FAINT;
+		}
+		else {
+			currentState = BattleState::ACTION_TURN;
+		}
 	}
+}
+
+bool BattleStateMachine::playerNeedsToSwitch(Player& player) {
+	log("Verificando se " + player.team.inBattle().name + " pode batalhar...");
+	if (player.team.inBattle().isDefeated()) {
+		log("O pokémon " + player.team.inBattle().name + " está derrotado!");
+		if (player.team.hasAlivePokemon()) {
+			log("O pokémon " + player.team.inBattle().name + " precisará ser substituído!");
+			return true;
+		}
+	}
+
+	return false;
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {
 	int count = 0;
-	for (auto& p : playerTeam) { if (!p.isNotDefeated()) { count++; } }
-
-	return count == playerTeam.size();
-}
-
-std::array<bool, 6> BattleStateMachine::getDefeatedPokemon(const std::array<Pokemon, 6>& party) {
-	std::array<bool, 6> defeated = {};
-
-	for (int i = 0; i < party.size(); i++) {
-		defeated[i] = !party.at(i).isNotDefeated();
-	}
-
-	return defeated;
-}
-
-void BattleStateMachine::getActivePokemon(Team& playerTeam) {
-	for (int i = 0; i < playerTeam.defeated.size(); i++) {
-		if (!playerTeam.defeated.at(i)) {
-			playerTeam.activePokemon = i;
-			break;
+	for (auto& p : playerTeam) {
+		if (p.isDefeated()) {
+			count++;
 		}
 	}
+
+	return count == playerTeam.size();
 }
 
 void BattleStateMachine::log(std::string text) {

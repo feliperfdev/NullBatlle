@@ -8,6 +8,7 @@
 #include "../models/Player.hpp"
 #include "../models/Pokemon.hpp"
 #include "../models/Team.hpp"
+#include "../../common/pokemon_print_helpers.hpp"
 #include "BattleAction.hpp"
 #include "BattleState.hpp"
 #include "TurnEngine.hpp"
@@ -17,8 +18,7 @@ class BattleStateMachine {
 		BattleState getState() const;
 
 		BattleStateMachine(
-			const std::array<Pokemon, 6>& myTeam,
-			const std::array<Pokemon, 6>& opositeTeam);
+			Player& player1, Player& player2);
 
 		void player1Action(BattleAction action);
 		void player2Action(BattleAction action);
@@ -29,6 +29,8 @@ class BattleStateMachine {
 		Pokemon& p2ActivePokemon();
 
 		Player winnerPlayer;
+
+		unsigned int whoWillSwitchPokemon = 0;
 
 	private:
 		Player player1;
@@ -52,9 +54,7 @@ class BattleStateMachine {
 
 		BattleState currentState;
 
-		std::array<bool, 6> getDefeatedPokemon(const std::array<Pokemon, 6>& party);
-
-		void getActivePokemon(Team& playerTeam);
+		bool playerNeedsToSwitch(Player& player);
 
 		void log(std::string text);
 };

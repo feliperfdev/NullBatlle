@@ -1,9 +1,12 @@
-#pragma once
+#ifndef POKEMONTEMPLATE
+#define POKEMONTEMPLATE
 
 #include "LearnsetEntry.hpp"
 #include "../../core/models/Pokemon.hpp"
 #include "../../core/models/Move.hpp"
 #include <array>
+#include <vector>
+
 struct PokemonTemplate {
     int id;
     std::string name;
@@ -32,3 +35,5 @@ struct PokemonTemplate {
             return Pokemon{ name, level, baseStats[0], types, baseStats, 0, moves };
         }
 };
+
+#endif // POKEMONTEMPLATE

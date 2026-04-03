@@ -12,7 +12,7 @@ endif()
 project ("NullBattle")
 
 # Add source to this project's executable.
-add_executable(NullBattle "NullBattle.cpp" "NullBattle.h")
+add_executable(NullBattle "NullBattle.cpp" "NullBattle.h" "common/UuidV4.cpp" "common/pokemon_print_helpers.cpp")
 
 include(FetchContent)
 

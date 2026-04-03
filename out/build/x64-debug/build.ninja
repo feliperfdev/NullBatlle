@@ -59,6 +59,26 @@ build CMakeFiles\NullBattle.dir\NullBattle.cpp.obj: CXX_COMPILER__NullBattle_uns
   TARGET_PDB = NullBattle.pdb
   TARGET_SUPPORT_DIR = CMakeFiles\NullBattle.dir
 
+build CMakeFiles\NullBattle.dir\common\UuidV4.cpp.obj: CXX_COMPILER__NullBattle_unscanned_Debug C$:\Dev\Estudos$ -$ DEV\c_cpp\NullBattle\common\UuidV4.cpp || cmake_object_order_depends_target_NullBattle
+  CONFIG = Debug
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\core" -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\data" -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\out\build\x64-debug\_deps\json-src\include"
+  OBJECT_DIR = CMakeFiles\NullBattle.dir
+  OBJECT_FILE_DIR = CMakeFiles\NullBattle.dir\common
+  TARGET_COMPILE_PDB = CMakeFiles\NullBattle.dir\
+  TARGET_PDB = NullBattle.pdb
+  TARGET_SUPPORT_DIR = CMakeFiles\NullBattle.dir
+
+build CMakeFiles\NullBattle.dir\common\pokemon_print_helpers.cpp.obj: CXX_COMPILER__NullBattle_unscanned_Debug C$:\Dev\Estudos$ -$ DEV\c_cpp\NullBattle\common\pokemon_print_helpers.cpp || cmake_object_order_depends_target_NullBattle
+  CONFIG = Debug
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20 -ZI
+  INCLUDES = -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\core" -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\data" -I"C:\Dev\Estudos - DEV\c_cpp\NullBattle\out\build\x64-debug\_deps\json-src\include"
+  OBJECT_DIR = CMakeFiles\NullBattle.dir
+  OBJECT_FILE_DIR = CMakeFiles\NullBattle.dir\common
+  TARGET_COMPILE_PDB = CMakeFiles\NullBattle.dir\
+  TARGET_PDB = NullBattle.pdb
+  TARGET_SUPPORT_DIR = CMakeFiles\NullBattle.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target NullBattle
@@ -67,7 +87,7 @@ build CMakeFiles\NullBattle.dir\NullBattle.cpp.obj: CXX_COMPILER__NullBattle_uns
 #############################################
 # Link the executable NullBattle.exe
 
-build NullBattle.exe: CXX_EXECUTABLE_LINKER__NullBattle_Debug CMakeFiles\NullBattle.dir\NullBattle.cpp.obj | core\nullbattle_core.lib data\nullbattle_data.lib core\nullbattle_core.lib || core\nullbattle_core.lib data\nullbattle_data.lib
+build NullBattle.exe: CXX_EXECUTABLE_LINKER__NullBattle_Debug CMakeFiles\NullBattle.dir\NullBattle.cpp.obj CMakeFiles\NullBattle.dir\common\UuidV4.cpp.obj CMakeFiles\NullBattle.dir\common\pokemon_print_helpers.cpp.obj | core\nullbattle_core.lib data\nullbattle_data.lib core\nullbattle_core.lib || core\nullbattle_core.lib data\nullbattle_data.lib
   CONFIG = Debug
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -ZI
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console

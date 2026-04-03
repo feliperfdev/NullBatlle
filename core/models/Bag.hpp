@@ -1,9 +1,12 @@
-#include "Item.hpp"
-#include <array>
+#ifndef BAG
+#define BAG
 
-static constexpr int BAG_MAX_SPACE = 100;
+#include "Item.hpp"
+#include <vector>
 
 struct Bag
 {
-	std::array<Item, BAG_MAX_SPACE> items;
+	std::vector<Item> items;
 };
+
+#endif // BAG

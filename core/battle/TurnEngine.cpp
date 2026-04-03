@@ -74,7 +74,7 @@ void TurnEngine::executeMoveAction(
 ) {
 	if (move.canUseMove()) {
 
-		int roll = generateRandom(100);
+		unsigned int roll = generateRandom(100);
 
 		bool moveHits = (roll <= move.accuracy) || (move.accuracy == 0);
 
@@ -113,7 +113,15 @@ void TurnEngine::executeItemAction(
 	Pokemon& itemReceiver,
 	Item& item
 ) {
+	if (item.isAHealHpItem()) {
+		item.healPokemonHP(itemReceiver);
+	} else if (item.hasAConditionHealEffect()) {
+		item.healPokemonCondition(itemReceiver);
+	}
+}
 
+void TurnEngine::switchActivePokemon(Player& player, int pokemonIndex) {
+	player.team.switchActivePokemon(pokemonIndex);
 }
 
 void TurnEngine::log(std::string text) {

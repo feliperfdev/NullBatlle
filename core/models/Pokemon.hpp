@@ -1,6 +1,8 @@
-#pragma once
+#ifndef POKEMON
+#define POKEMON
 
 #include "Move.hpp"
+#include <array>
 
 struct Pokemon
 {
@@ -30,10 +32,11 @@ struct Pokemon
 		unsigned int attack() const { return stats[1]; }
 		unsigned int spAttack() const { return stats[2]; }
 		unsigned int defense() const { return stats[3]; }
-		unsigned int sdDefense() const { return stats[4]; }
+		unsigned int spDefense() const { return stats[4]; }
 		unsigned int speed() const { return stats[5]; }
 
 		bool isNotDefeated() const { return currentHP > 0; }
+		bool isDefeated() const { return !isNotDefeated(); }
 
 		bool isBurned() const { return battleCondition == 1; }
 		bool isAsleep() const { return battleCondition == 2; }
@@ -55,3 +58,5 @@ struct Pokemon
 			}
 		}
 };
+
+#endif // POKEMON

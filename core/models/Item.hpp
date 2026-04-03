@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ITEM
+#define ITEM
 
 #include <string>
 #include <optional>
@@ -6,6 +7,8 @@
 struct Item
 {
 	std::string name;
+
+	// 0 = User casual; 1 = Heal HP; 2 = Heal condition; 3 = Berry; 4 = Combat Item; 5 = Pokéball;
 	unsigned int itemType;
 
 	// 0 = None, 1 = Full heal, 2 = Burn heal, 3 = Antidote, 4 = Awakening, 
@@ -18,10 +21,12 @@ struct Item
 
 		bool isAHealHpItem() { return healHP.has_value(); }
 
+		bool hasAConditionHealEffect() { return healEffect == 0; }
+		
 		void healPokemonHP(Pokemon& pokemon) {
 			if (!isAHealHpItem()) return;
 
-			int resultHP = healHP.value() + pokemon.currentHP;
+			unsigned int resultHP = healHP.value() + pokemon.currentHP;
 
 			if (resultHP > pokemon.maxHP()) {
 				pokemon.currentHP = pokemon.maxHP();
@@ -59,3 +64,5 @@ struct Item
 			}
 		}
 };
+
+#endif // ITEM

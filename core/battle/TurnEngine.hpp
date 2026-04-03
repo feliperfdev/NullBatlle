@@ -9,6 +9,7 @@
 #include "../models/Pokemon.hpp"
 #include "../models/Move.hpp"
 #include "../models/Item.hpp"
+#include "../models/Player.hpp"
 
 class TurnEngine {
 	public:
@@ -34,6 +35,8 @@ class TurnEngine {
 			Pokemon& itemReceiver,
 			Item& item
 		);
+
+		void switchActivePokemon(Player& player, int pokemonIndex);
 
 	private:
 		BattleAction p1Action;
