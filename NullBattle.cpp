@@ -150,7 +150,9 @@ int main()
 			player1, player2
 		);
 
-		while (!battleEngine.battleEnded()) {
+		bool battleEnd = false;
+
+		while (!battleEnd) {
 
 			switch (battleEngine.getState()) {
 				case BattleState::ACTION_TURN:
@@ -175,6 +177,8 @@ int main()
 				case BattleState::BATTLE_END:
 					printVictoryScreen(battleEngine.winnerPlayer, battleEngine.getTotalTurns());
 					saveMatchResult(session, battleEngine.getTotalTurns(), battleEngine.winnerPlayer);
+
+					battleEnd = true;
 
 					break;
 			}
