@@ -1,11 +1,10 @@
 #include "BattleStateMachine.hpp"
 
+int BattleStateMachine::getTotalTurns() { return totalTurns; }
+
 BattleStateMachine::BattleStateMachine(
 	Player& player1, Player& player2
-) : currentState(BattleState::TEAM_SELECT), winnerId(0) {
-	this->player1 = player1;
-	this->player2 = player2;
-
+) : currentState(BattleState::TEAM_SELECT), winnerId(0), player1(player1), player2(player2) {
 	log("Initialized Player 1 team: " + printPokemonData(player1.team.party[0]));
 
 	log("Initialized Player 2 team: " + printPokemonData(player2.team.party[0]));
@@ -16,8 +15,6 @@ BattleStateMachine::BattleStateMachine(
 BattleState BattleStateMachine::getState() const { return currentState; }
 
 void BattleStateMachine::checkWinner() {
-	log("Checando se há vencedor...");
-
 	if (isOver(player1.team.party)) {
 		winnerId = player2.id;
 		winnerPlayer = player2;
@@ -35,23 +32,26 @@ int BattleStateMachine::getWinner() { return winnerId; }
 
 bool BattleStateMachine::gameHasWinner() { return getWinner() != 0; }
 
+bool BattleStateMachine::battleEnded() { return currentState == BattleState::BATTLE_END; }
+
 void BattleStateMachine::player1Action(BattleAction action) {
 	p1Action = action;
-	executeTurnActions();
 }
 
 void BattleStateMachine::player2Action(BattleAction action) {
 	p2Action = action;
-	executeTurnActions();
 }
 
 bool BattleStateMachine::checkIfP1HasAction() { return p1Action.has_value(); }
 bool BattleStateMachine::checkIfP2HasAction() { return p2Action.has_value(); }
 
+void BattleStateMachine::startExecutingTurn() { currentState = BattleState::ACTION_EXECUTING_TURN; }
+
+void BattleStateMachine::startNewTurn() { currentState = BattleState::ACTION_TURN; }
+
 void BattleStateMachine::executeTurnActions() {
 	if (!checkIfP1HasAction() || !checkIfP2HasAction()) return;
-
-	currentState = BattleState::ACTION_EXECUTING_TURN;
+	totalTurns++;
 
 	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
 
@@ -67,17 +67,15 @@ void BattleStateMachine::executeTurnActions() {
 	Move& selectedMoveP2 = p2Poke.moves.at(p2Action.value().index);
 
 	if (order == 1) {
-		log(p1Poke.name + " vai primeiro!");
 		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
 		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
 	}
 	else {
-		log(p2Poke.name + " vai primeiro!");
 		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
 		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
 	}
 
-	currentState = BattleState::END_TURN;
+	//currentState = BattleState::END_TURN;
 
 	log(printPokemonData(p1Poke));
 	log(printPokemonData(p2Poke));
@@ -94,17 +92,15 @@ void BattleStateMachine::executeTurnActions() {
 		if (whoWillSwitchPokemon > 0) {
 			currentState = BattleState::SWITCH_AFTER_FAINT;
 		}
-		
-		currentState = BattleState::ACTION_TURN;
+		else {
+			currentState = BattleState::ACTION_TURN;
+		}
 	}
 }
 
 bool BattleStateMachine::playerNeedsToSwitch(Player& player) {
-	log("Verificando se " + player.team.inBattle().name + " pode batalhar...");
 	if (player.team.inBattle().isDefeated()) {
-		log("O pokémon " + player.team.inBattle().name + " está derrotado!");
 		if (player.team.hasAlivePokemon()) {
-			log("O pokémon " + player.team.inBattle().name + " precisará ser substituído!");
 			return true;
 		}
 	}

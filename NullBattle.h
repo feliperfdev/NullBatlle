@@ -8,5 +8,7 @@
 #include "core/battle/BattleStateMachine.hpp"
 #include "core/battle/TurnEngine.hpp"
 #include "common/UuidV4.cpp"
+#include <nlohmann/json.hpp>
+#include <fstream> 
 
 // TODO: Reference additional headers your program requires here.

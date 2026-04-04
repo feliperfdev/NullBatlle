@@ -5,54 +5,36 @@ void log(std::string text) {
 	std::cout << "[CoreEngine] " + text << std::endl;
 }
 
-void printMoves(Pokemon& pokemon) {
-	std::array<Move, 4> pokemonMoves = pokemon.moves;
-
-	int moveIndex = 0;
-	for (auto& move : pokemonMoves) {
-		moveIndex++;
-		std::cout << "[" + std::to_string(moveIndex) + "] " + move.name + " - " + "(" + std::to_string(move.pp.at(0)) + "/" + std::to_string(move.pp.at(1)) + ") PP" << std::endl;
-	}
-}
-
 void runPlayersActions(BattleStateMachine& engine) {
 
 	Pokemon& p1Pokemon = engine.p1ActivePokemon();
 	Pokemon& p2Pokemon = engine.p2ActivePokemon();
 
-	int p1Index, p2Index = 0;
+	for (unsigned int k = 0; k <= 1; k++) {
+		printBattlePanel();
+		int actionIndex = 0;
 
-	std::cout << "[Player 1] > Faça uma ação: ";
+		std::cout << "[Player  " + std::to_string(k+1) + "] > Faça uma ação: ";
 
-	int p1Action;
+		int action;
 
-	std::cin >> p1Action;
+		std::cin >> action;
 
-	if (ActionTypeMap[p1Action] == ActionType::USE_MOVE) { 
-		printMoves(p1Pokemon);
+		if (ActionTypeMap[action] == ActionType::USE_MOVE) {
+			printMovesPanel((k+1) == 1 ? p1Pokemon : p2Pokemon, k + 1);
 
-		std::cout << "[Player 1] > Escolha um golpe: ";
-		std::cin >> p1Index;
+			std::cout << "[Player  " + std::to_string(k + 1) + "] > Escolha um golpe: ";
+			std::cin >> actionIndex;
+		}
+
+		if (actionIndex == 0) { actionIndex = 1; }
+
+		if (k + 1 == 1) {
+			engine.player1Action(BattleAction{ ActionTypeMap[action], actionIndex - 1 });
+		} else { engine.player2Action(BattleAction{ ActionTypeMap[action], actionIndex - 1 }); }
 	}
 
-
-	std::cout << "[Player 2] > Faça uma ação: ";
-
-	int p2Action;
-
-	std::cin >> p2Action;
-
-	if (ActionTypeMap[p2Action] == ActionType::USE_MOVE) { 
-		printMoves(p2Pokemon);
-
-		std::cout << "[Player 2] > Escolha um golpe: ";
-		std::cin >> p2Index;
-	}
-
-	if (p1Index <= 0) { p1Index = 1; } if (p2Index <= 0) { p2Index = 1; }
-
-	engine.player1Action(BattleAction{ ActionTypeMap[p1Action], p1Index - 1 });
-	engine.player2Action(BattleAction{ ActionTypeMap[p2Action], p2Index - 1 });
+	engine.startExecutingTurn();
 
 	std::cout << std::endl;
 }
@@ -119,6 +101,33 @@ void forceSwitchActivePokemon(Player& player) {
 	player.team.switchActivePokemon(pokemonIndex);
 }
 
+void saveMatchResult(
+	const std::string& sessionId,
+	int totalTurns,
+	const Player& winnerPlayer
+) {
+	nlohmann::json result;
+
+	result["sessionId"] = sessionId;
+	result["totalTurns"] = totalTurns;
+	result["winnerPlayer"] = {
+		{"id",       winnerPlayer.id},
+		{"lastUsed", winnerPlayer.team.party.size()}
+	};
+
+	std::string filename = "match_" + sessionId + ".json";
+	std::ofstream file(filename);
+
+	if (!file.is_open()) {
+		throw std::runtime_error("Nao foi possivel salvar o resultado em: " + filename);
+	}
+
+	file << result.dump(2);
+	file.close();
+
+	log("Resultado salvo em " + filename + "\n");
+}
+
 int main()
 {
 	setlocale(LC_ALL, "Portuguese");
@@ -141,7 +150,7 @@ int main()
 			player1, player2
 		);
 
-		while (!battleEngine.gameHasWinner()) {
+		while (!battleEngine.battleEnded()) {
 
 			switch (battleEngine.getState()) {
 				case BattleState::ACTION_TURN:
@@ -154,14 +163,18 @@ int main()
 					forceSwitchActivePokemon(
 						battleEngine.whoWillSwitchPokemon == 1 ? player1 : player2);
 
+					battleEngine.startNewTurn();
+
 					break;
 				case BattleState::ACTION_EXECUTING_TURN:
 					log("Entrando em modo de execução do turno...");
+					battleEngine.executeTurnActions();
 
 					break;
 
 				case BattleState::BATTLE_END:
-					log("Player " + std::to_string(battleEngine.winnerPlayer.id) + " won the battle!");
+					printVictoryScreen(battleEngine.winnerPlayer, battleEngine.getTotalTurns());
+					saveMatchResult(session, battleEngine.getTotalTurns(), battleEngine.winnerPlayer);
 
 					break;
 			}

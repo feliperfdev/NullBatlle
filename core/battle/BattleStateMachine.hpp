@@ -20,10 +20,17 @@ class BattleStateMachine {
 		BattleStateMachine(
 			Player& player1, Player& player2);
 
+		int getTotalTurns();
+
 		void player1Action(BattleAction action);
 		void player2Action(BattleAction action);
 
+		void startNewTurn();
+		void startExecutingTurn();
+		void executeTurnActions();
+
 		bool gameHasWinner();
+		bool battleEnded();
 
 		Pokemon& p1ActivePokemon();
 		Pokemon& p2ActivePokemon();
@@ -33,8 +40,10 @@ class BattleStateMachine {
 		unsigned int whoWillSwitchPokemon = 0;
 
 	private:
-		Player player1;
-		Player player2;
+		Player& player1;
+		Player& player2;
+
+		int totalTurns = 0;
 
 		std::optional<BattleAction> p1Action;
 		std::optional<BattleAction> p2Action;
@@ -43,8 +52,6 @@ class BattleStateMachine {
 
 		bool checkIfP1HasAction();
 		bool checkIfP2HasAction();
-
-		void executeTurnActions();
 
 		int winnerId;
 
