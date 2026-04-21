@@ -32,7 +32,7 @@ struct PokemonTemplate {
                 }
             }
 
-            return Pokemon{ name, level, baseStats[0], types, baseStats, 0, moves };
+            return Pokemon{ name, level, baseStats[0], types, baseStats, BattleCondition::NONE, moves };
         }
 };
 

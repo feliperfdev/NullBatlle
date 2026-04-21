@@ -1,6 +1,6 @@
 #include "BattleStateMachine.hpp"
 
-int BattleStateMachine::getTotalTurns() { return totalTurns; }
+int BattleStateMachine::getTotalTurns() const { return totalTurns; }
 
 BattleStateMachine::BattleStateMachine(
 	Player& player1, Player& player2
@@ -28,11 +28,11 @@ void BattleStateMachine::checkWinner() {
 
 }
 
-int BattleStateMachine::getWinner() { return winnerId; }
+int BattleStateMachine::getWinner() const { return winnerId; }
 
-bool BattleStateMachine::gameHasWinner() { return getWinner() != 0; }
+bool BattleStateMachine::gameHasWinner() const { return getWinner() != 0; }
 
-bool BattleStateMachine::battleEnded() { return currentState == BattleState::BATTLE_END; }
+bool BattleStateMachine::battleEnded() const { return currentState == BattleState::BATTLE_END; }
 
 void BattleStateMachine::player1Action(BattleAction action) {
 	p1Action = action;
@@ -109,17 +109,13 @@ bool BattleStateMachine::playerNeedsToSwitch(Player& player) {
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {
-	int count = 0;
-	for (auto& p : playerTeam) {
-		if (p.isDefeated()) {
-			count++;
-		}
+	for (const auto& p : playerTeam) {
+		if (p.isNotDefeated()) return false;
 	}
-
-	return count == playerTeam.size();
+	return true;
 }
 
-void BattleStateMachine::log(std::string text) {
+void BattleStateMachine::log(const std::string& text) {
 	std::cout << "[" + BattleStateMap[getState()] + "] > ";
 	std::cout << text << std::endl;
 }

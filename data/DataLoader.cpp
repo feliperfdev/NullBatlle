@@ -6,8 +6,8 @@ std::map<std::string, Move> DataLoader::loadMoves() {
 	std::ifstream f(std::string(DATA_PATH) + "moves.json");
 	json data = json::parse(f);
 
-	for (auto& move : data.items()) {
-		json object = move.value();
+	for (const auto& move : data.items()) {
+		const json& object = move.value();
 
 		std::array<int, 2> pp = { 0, 0 };
 		if (!object.at("pp").is_null()) {
@@ -20,10 +20,10 @@ std::map<std::string, Move> DataLoader::loadMoves() {
 			int priorVal = object.at("priority").get<int>();
 			priority = priorVal;
 		}
-		unsigned int category = 0;
+		MoveCategory category = MoveCategory::DEFAULT;
 		if (!object.at("category").is_null()) {
 			int catVal = object.at("category").get<int>();
-			category = catVal;
+			category = static_cast<MoveCategory>(catVal);
 		}
 
 		unsigned int accuracy = 0;
@@ -54,10 +54,10 @@ std::vector<PokemonTemplate> DataLoader::loadPokemon() {
 
 	int pkmnCount = 0;
 
-	for (auto& move : data.items()) {
+	for (const auto& move : data.items()) {
 		pkmnCount++;
 
-		json object = move.value();
+		const json& object = move.value();
 
 		std::array<Types, 2> types = {};
 
@@ -94,6 +94,6 @@ std::vector<PokemonTemplate> DataLoader::loadPokemon() {
 	return pokemonTemplate;
 }
 
-void DataLoader::log(std::string text) {
+void DataLoader::log(const std::string& text) {
 	std::cout << "[DataLoader] " + text << std::endl;
 }

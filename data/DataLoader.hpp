@@ -19,5 +19,5 @@ class DataLoader {
 		std::vector<PokemonTemplate> loadPokemon();
 
 	private:
-		void log(std::string text);
+		void log(const std::string& text);
 };

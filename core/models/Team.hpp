@@ -11,8 +11,8 @@ struct Team
 		int firstNotDefeated() {
 			int pokemonIdx = 0;
 
-			for (int i = 0; i < party.size(); i++) {
-				Pokemon pkmn = party.at(i);
+			for (int i = 0; i < (int)party.size(); i++) {
+				const Pokemon& pkmn = party.at(i);
 
 				if (pkmn.currentHP > 0) {
 					pokemonIdx = i;
@@ -26,13 +26,11 @@ struct Team
 		int activePokemon = firstNotDefeated();
 
 	public:
-		Pokemon& inBattle() { return party[activePokemon]; }
-
-		std::array<Pokemon, 6> getDefeatedPokemon() {
+		std::array<Pokemon, 6> getDefeatedPokemon() const {
 			std::array<Pokemon, 6> def = {};
 
-			for (int i = 0; i < party.size(); i++) {
-				Pokemon& pkmn = party.at(i);
+			for (int i = 0; i < (int)party.size(); i++) {
+				const Pokemon& pkmn = party.at(i);
 
 				if (!pkmn.isNotDefeated()) {
 					def[i] = pkmn;
@@ -42,29 +40,29 @@ struct Team
 			return def;
 		}
 
-		bool checkDefeated(std::string name) {
-			std::array<Pokemon, 6> def = getDefeatedPokemon();
-
-			for (auto& poke : def) {
-				return poke.name == name;
+		bool checkDefeated(const std::string& name) const {
+			for (const auto& poke : party) {
+				if (poke.isDefeated() && poke.name == name) return true;
 			}
-
 			return false;
 		}
 
-		unsigned int countAlive() {
+		Pokemon& inBattle() { return party[activePokemon]; }
+		const Pokemon& inBattle() const { return party[activePokemon]; }
+
+		unsigned int countAlive() const {
 			int count = 0;
 
-			for (auto& poke : party) {
+			for (const auto& poke : party) {
 				if (poke.currentHP > 0) { count++; }
 			}
 
 			return count;
 		}
 
-		unsigned int countDefeated() { return party.size() - countAlive(); }
+		unsigned int countDefeated() const { return (unsigned int)party.size() - countAlive(); }
 
-		bool hasAlivePokemon() { return countAlive() > 0; }
+		bool hasAlivePokemon() const { return countAlive() > 0; }
 
 		void switchActivePokemon(unsigned int pokemonIndex) {
 			if (party[pokemonIndex].isNotDefeated()) {

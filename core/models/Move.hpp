@@ -4,6 +4,12 @@
 #include <string>
 #include <optional>
 
+enum class MoveCategory : unsigned int {
+	DEFAULT  = 0,
+	PHYSICAL = 1,
+	SPECIAL  = 2
+};
+
 struct Move
 {
 	// Array {currentPP, maxPP}
@@ -15,16 +21,15 @@ struct Move
 
 	unsigned int accuracy;
 
-	// 0 = Default; 1 = Físico ; 2 = Especial
-	unsigned int category;
+	MoveCategory category;
 
 	Types type;
 
 	std::string name;
 
 	public:
-		bool isPhysicalMove() const { return category == 1; }
-		bool isSpecialMove() const { return category == 2; }
+		bool isPhysicalMove() const { return category == MoveCategory::PHYSICAL; }
+		bool isSpecialMove() const { return category == MoveCategory::SPECIAL; }
 
 		bool isDamageMove() const { return power.has_value(); }
 

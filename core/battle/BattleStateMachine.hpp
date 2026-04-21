@@ -20,7 +20,7 @@ class BattleStateMachine {
 		BattleStateMachine(
 			Player& player1, Player& player2);
 
-		int getTotalTurns();
+		int getTotalTurns() const;
 
 		void player1Action(BattleAction action);
 		void player2Action(BattleAction action);
@@ -29,8 +29,8 @@ class BattleStateMachine {
 		void startExecutingTurn();
 		void executeTurnActions();
 
-		bool gameHasWinner();
-		bool battleEnded();
+		bool gameHasWinner() const;
+		bool battleEnded() const;
 
 		Pokemon& p1ActivePokemon();
 		Pokemon& p2ActivePokemon();
@@ -40,6 +40,8 @@ class BattleStateMachine {
 		unsigned int whoWillSwitchPokemon = 0;
 
 	private:
+		// Both references must outlive this BattleStateMachine.
+		// Ownership belongs to main(), which also owns this machine.
 		Player& player1;
 		Player& player2;
 
@@ -57,13 +59,13 @@ class BattleStateMachine {
 
 		void checkWinner();
 
-		int getWinner();
+		int getWinner() const;
 
 		BattleState currentState;
 
 		bool playerNeedsToSwitch(Player& player);
 
-		void log(std::string text);
+		void log(const std::string& text);
 };
 
 #endif // BATTLE_STATE_MACHINE

@@ -3,26 +3,43 @@
 
 #include <string>
 #include <optional>
+#include "Pokemon.hpp"
+
+enum class ItemType : unsigned int {
+	CASUAL    = 0,
+	HEAL_HP   = 1,
+	HEAL_COND = 2,
+	BERRY     = 3,
+	COMBAT    = 4,
+	POKEBALL  = 5
+};
+
+enum class HealEffect : unsigned int {
+	NONE          = 0,
+	FULL_HEAL     = 1,
+	BURN_HEAL     = 2,
+	ANTIDOTE      = 3,
+	AWAKENING     = 4,
+	PARALYZE_HEAL = 5,
+	ICE_HEAL      = 6
+};
 
 struct Item
 {
 	std::string name;
 
-	// 0 = User casual; 1 = Heal HP; 2 = Heal condition; 3 = Berry; 4 = Combat Item; 5 = Pokéball;
-	unsigned int itemType;
+	ItemType itemType;
 
-	// 0 = None, 1 = Full heal, 2 = Burn heal, 3 = Antidote, 4 = Awakening, 
-	// 5 = Paralyze Heal, 6 = Ice Heal
-	unsigned int healEffect;
+	HealEffect healEffect;
 
 	std::optional<int> healHP;
 
 	public:
 
-		bool isAHealHpItem() { return healHP.has_value(); }
+		bool isAHealHpItem() const { return healHP.has_value(); }
 
-		bool hasAConditionHealEffect() { return healEffect == 0; }
-		
+		bool hasAConditionHealEffect() const { return healEffect != HealEffect::NONE; }
+
 		void healPokemonHP(Pokemon& pokemon) {
 			if (!isAHealHpItem()) return;
 
@@ -32,35 +49,35 @@ struct Item
 				pokemon.currentHP = pokemon.maxHP();
 			}
 			else {
-				pokemon.currentHP += resultHP;
+				pokemon.currentHP = resultHP;
 			}
 		}
 
 		void healPokemonCondition(Pokemon& pokemon) {
 			if (!pokemon.hasAnyBattleCondition()) return;
 
-			if (healEffect == 1) {
-				pokemon.battleCondition = 0;
+			if (healEffect == HealEffect::FULL_HEAL) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 
-			if (pokemon.isBurned() && healEffect == 2) {
-				pokemon.battleCondition = 0;
+			if (pokemon.isBurned() && healEffect == HealEffect::BURN_HEAL) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 
-			if (pokemon.isPoisoned() && healEffect == 3) {
-				pokemon.battleCondition = 0;
+			if (pokemon.isPoisoned() && healEffect == HealEffect::ANTIDOTE) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 
-			if (pokemon.isAsleep() && healEffect == 4) {
-				pokemon.battleCondition = 0;
+			if (pokemon.isAsleep() && healEffect == HealEffect::AWAKENING) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 
-			if (pokemon.isParalyzed() && healEffect == 5) {
-				pokemon.battleCondition = 0;
+			if (pokemon.isParalyzed() && healEffect == HealEffect::PARALYZE_HEAL) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 
-			if (pokemon.isFreezed() && healEffect == 6) {
-				pokemon.battleCondition = 0;
+			if (pokemon.isFreezed() && healEffect == HealEffect::ICE_HEAL) {
+				pokemon.battleCondition = BattleCondition::NONE;
 			}
 		}
 };

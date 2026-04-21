@@ -1,7 +1,7 @@
 ﻿#include "NullBattle.h"
 #include <DataLoader.hpp>
 
-void log(std::string text) {
+void log(const std::string& text) {
 	std::cout << "[CoreEngine] " + text << std::endl;
 }
 
@@ -112,7 +112,7 @@ void saveMatchResult(
 	result["totalTurns"] = totalTurns;
 	result["winnerPlayer"] = {
 		{"id",       winnerPlayer.id},
-		{"lastUsed", winnerPlayer.team.party.size()}
+		{"partySize", winnerPlayer.team.party.size()}
 	};
 
 	std::string filename = "match_" + sessionId + ".json";

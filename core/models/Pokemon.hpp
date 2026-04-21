@@ -4,6 +4,17 @@
 #include "Move.hpp"
 #include <array>
 
+enum class BattleCondition : unsigned int {
+	NONE      = 0,
+	BURNED    = 1,
+	ASLEEP    = 2,
+	PARALYZED = 3,
+	POISONED  = 4,
+	FREEZED   = 5,
+	CONFUSED  = 6,
+	ATTRACTED = 7
+};
+
 struct Pokemon
 {
 	std::string name;
@@ -11,19 +22,11 @@ struct Pokemon
 	unsigned int currentHP;
 
 	std::array<Types, 2> types;
-	
+
 	// 0 = maxHP, 1 = Atk, 2 = Sp.Atk, 3 = Def, 4 = Sp.Def, 5 = Spe.
 	std::array<unsigned int, 6> stats;
 
-	// 0 = None
-	// 1 = Burned
-	// 2 = Sleep
-	// 3 = Paralyzed
-	// 4 = Poisoned
-	// 5 = Freezed
-	// 6 = Confusion
-	// 7 = Attracted
-	unsigned int battleCondition;
+	BattleCondition battleCondition;
 
 	std::array<Move, 4> moves;
 
@@ -38,18 +41,16 @@ struct Pokemon
 		bool isNotDefeated() const { return currentHP > 0; }
 		bool isDefeated() const { return !isNotDefeated(); }
 
-		bool isBurned() const { return battleCondition == 1; }
-		bool isAsleep() const { return battleCondition == 2; }
-		bool isParalyzed() const { return battleCondition == 3; }
-		bool isPoisoned() const { return battleCondition == 4; }
-		bool isFreezed() const { return battleCondition == 5; }
-		bool isConfused() const { return battleCondition == 6; }
-		bool isAttracted() const { return battleCondition == 7; }
+		bool isBurned() const { return battleCondition == BattleCondition::BURNED; }
+		bool isAsleep() const { return battleCondition == BattleCondition::ASLEEP; }
+		bool isParalyzed() const { return battleCondition == BattleCondition::PARALYZED; }
+		bool isPoisoned() const { return battleCondition == BattleCondition::POISONED; }
+		bool isFreezed() const { return battleCondition == BattleCondition::FREEZED; }
+		bool isConfused() const { return battleCondition == BattleCondition::CONFUSED; }
+		bool isAttracted() const { return battleCondition == BattleCondition::ATTRACTED; }
 
 		bool hasAnyBattleCondition() const {
-			return isBurned() || isAsleep() || isParalyzed() ||
-				isPoisoned() || isFreezed() || isConfused() ||
-				isAttracted();
+			return battleCondition != BattleCondition::NONE;
 		}
 
 		void receiveDamage(int damage) {

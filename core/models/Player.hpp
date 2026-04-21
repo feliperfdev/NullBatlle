@@ -12,7 +12,7 @@ struct Player
 	Bag bag;
 
 	public:
-		std::vector<Item> openBag() { return bag.items; }
+		const std::vector<Item>& openBag() const { return bag.items; }
 };
 
 #endif // PLAYER

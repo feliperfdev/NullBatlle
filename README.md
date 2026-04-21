@@ -79,18 +79,18 @@ Before damage is applied, `TurnEngine::executeMoveAction()` rolls a value from 1
 
 ### 6. Status Conditions
 
-The `Pokemon` struct tracks `battleCondition` as an integer flag:
+The `Pokemon` struct tracks `battleCondition` as a typed `BattleCondition` enum:
 
 | Value | Condition |
 |---|---|
-| 0 | None |
-| 1 | Burn |
-| 2 | Sleep |
-| 3 | Paralysis |
-| 4 | Poison |
-| 5 | Freeze |
-| 6 | Confusion |
-| 7 | Attraction |
+| `BattleCondition::NONE` | None |
+| `BattleCondition::BURNED` | Burn |
+| `BattleCondition::ASLEEP` | Sleep |
+| `BattleCondition::PARALYZED` | Paralysis |
+| `BattleCondition::POISONED` | Poison |
+| `BattleCondition::FREEZED` | Freeze |
+| `BattleCondition::CONFUSED` | Confusion |
+| `BattleCondition::ATTRACTED` | Attraction |
 
 Status flags are stored and query helpers (`isBurned()`, `isParalyzed()`, etc.) are implemented on `Pokemon`. End-of-turn effects (burn chip damage, poison damage, sleep counter, paralysis speed drop) and a dedicated `StatusManager` are not yet implemented.
 
@@ -198,7 +198,7 @@ Stats order: `[MaxHP, Atk, SpAtk, Def, SpDef, Speed]`
 }
 ```
 
-Categories: `1` = Physical, `2` = Special, `0` = Status
+Categories: `MoveCategory::PHYSICAL` (1), `MoveCategory::SPECIAL` (2), `MoveCategory::DEFAULT` (0 — status/other)
 
 ---
 
@@ -224,3 +224,33 @@ Categories: `1` = Physical, `2` = Special, `0` = Status
 | Item usage in battle | Planned |
 | UI (Dear ImGui) | Planned |
 | Unit tests (Catch2) | Planned |
+
+---
+
+## Type Enums
+
+All magic integer constants have been replaced with typed `enum class` values for safety and readability.
+
+**`BattleCondition`** — defined in `core/models/Pokemon.hpp`
+```cpp
+enum class BattleCondition : unsigned int {
+    NONE, BURNED, ASLEEP, PARALYZED, POISONED, FREEZED, CONFUSED, ATTRACTED
+};
+```
+
+**`MoveCategory`** — defined in `core/models/Move.hpp`
+```cpp
+enum class MoveCategory : unsigned int { DEFAULT, PHYSICAL, SPECIAL };
+```
+
+**`ItemType`** — defined in `core/models/Item.hpp`
+```cpp
+enum class ItemType : unsigned int { CASUAL, HEAL_HP, HEAL_COND, BERRY, COMBAT, POKEBALL };
+```
+
+**`HealEffect`** — defined in `core/models/Item.hpp`
+```cpp
+enum class HealEffect : unsigned int {
+    NONE, FULL_HEAL, BURN_HEAL, ANTIDOTE, AWAKENING, PARALYZE_HEAL, ICE_HEAL
+};
+```

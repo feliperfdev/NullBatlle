@@ -5,6 +5,7 @@
 #include <array>
 #include <optional>
 #include <iostream>
+#include <random>
 #include "BattleAction.hpp"
 #include "../models/Pokemon.hpp"
 #include "../models/Move.hpp"
@@ -16,13 +17,13 @@ class TurnEngine {
 		int priority;
 
 		TurnEngine(
-			BattleAction& p1Action,
-			BattleAction& p2Action
+			BattleAction p1Action,
+			BattleAction p2Action
 		);
 
 		int determineOrder(
-			Pokemon& p1Pokemon,
-			Pokemon& p2Pokemon
+			const Pokemon& p1Pokemon,
+			const Pokemon& p2Pokemon
 		);
 
 		void executeMoveAction(
@@ -41,7 +42,9 @@ class TurnEngine {
 	private:
 		BattleAction p1Action;
 		BattleAction p2Action;
-		void log(std::string text);
+		std::mt19937 m_rng;
+		int generateRandom(int max);
+		void log(const std::string& text);
 };
 
 #endif // TURN_ENGINE

@@ -1,4 +1,5 @@
 #include "pokemon_print_helpers.hpp"
+#include <sstream>
 
 void clearScreen() {
     // \033[H moves the cursor to the top left
@@ -25,21 +26,20 @@ std::string printPokemonData(const Pokemon& pokemon) {
 	if (pokemon.isAsleep())    condition = "SLP";
 	if (pokemon.isFreezed())   condition = "FRZ";
 
-	std::string result = "";
-	result += "\n[-----------------------------------]\n";
-	result += "| " + pokemon.name + " (Lv." + std::to_string(pokemon.level) + ")  [" + condition + "]\n";
-	result += "| HP: [" + hpBar + "] " + std::to_string(pokemon.currentHP) + "/" + std::to_string(pokemon.maxHP()) + "\n";
-	result += "| ATK:" + std::to_string(pokemon.attack()) +
-		"  DEF:" + std::to_string(pokemon.defense()) +
-		"  SPE:" + std::to_string(pokemon.speed()) + "\n";
-	result += "| Moves: ";
-	for (auto& m : pokemon.moves) {
-		result += m.name + "(" + std::to_string(m.pp[0]) + "/" + std::to_string(m.pp[1]) + ") ";
+	std::ostringstream oss;
+	oss << "\n[-----------------------------------]\n"
+	    << "| " << pokemon.name << " (Lv." << pokemon.level << ")  [" << condition << "]\n"
+	    << "| HP: [" << hpBar << "] " << pokemon.currentHP << "/" << pokemon.maxHP() << "\n"
+	    << "| ATK:" << pokemon.attack()
+	    << "  DEF:" << pokemon.defense()
+	    << "  SPE:" << pokemon.speed() << "\n"
+	    << "| Moves: ";
+	for (const auto& m : pokemon.moves) {
+		oss << m.name << "(" << m.pp[0] << "/" << m.pp[1] << ") ";
 	}
-	result += "\n";
-	result += "[-----------------------------------]";
+	oss << "\n[-----------------------------------]";
 
-	return result;
+	return oss.str();
 }
 
 void printBattlePanel() {

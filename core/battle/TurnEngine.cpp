@@ -3,26 +3,20 @@
 #include <iostream>
 
 TurnEngine::TurnEngine(
-	BattleAction& p1Action,
-	BattleAction& p2Action
-) {
-	this->p1Action = p1Action;
-	this->p2Action = p2Action;
+	BattleAction p1Action,
+	BattleAction p2Action
+) : p1Action(std::move(p1Action)), p2Action(std::move(p2Action)),
+    m_rng(std::random_device{}())
+{
 	log("Started Turn Engine!");
 }
 
-int generateRandom(int max) {
-	std::random_device seed;
-	std::mt19937 gen{ seed() };
-
+int TurnEngine::generateRandom(int max) {
 	std::uniform_int_distribution<int> dist(1, max);
-
-	int random_num = dist(gen);
-
-	return random_num;
+	return dist(m_rng);
 }
 
-int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
+int TurnEngine::determineOrder(const Pokemon& p1Pokemon, const Pokemon& p2Pokemon) {
 	log("Determining battle order...");
 	int whoActsFirst = 0;
 
@@ -50,14 +44,15 @@ int TurnEngine::determineOrder(Pokemon& p1Pokemon, Pokemon& p2Pokemon) {
 		whoActsFirst = priority;
 
 		if (whoActsFirst != 0) return whoActsFirst;
-		
+
 		// Caso nenhum tenha prioridade por move:
 
 		int p1Speed = p1Pokemon.speed();
 		int p2Speed = p2Pokemon.speed();
 
 		if (p1Speed == p2Speed) {
-			whoActsFirst = (rand() % 2) + 1;
+			std::uniform_int_distribution<int> coinFlip(1, 2);
+			whoActsFirst = coinFlip(m_rng);
 		}
 		else {
 			if (p1Speed > p2Speed) { whoActsFirst = 1; } else { whoActsFirst = 2; }
@@ -124,6 +119,6 @@ void TurnEngine::switchActivePokemon(Player& player, int pokemonIndex) {
 	player.team.switchActivePokemon(pokemonIndex);
 }
 
-void TurnEngine::log(std::string text) {
+void TurnEngine::log(const std::string& text) {
 	std::cout << "[TurnEngine] " + text << std::endl;
 }
