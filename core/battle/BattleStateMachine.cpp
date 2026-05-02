@@ -75,15 +75,12 @@ void BattleStateMachine::executeTurnActions() {
 		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
 	}
 
-	//currentState = BattleState::END_TURN;
-
 	log(printPokemonData(p1Poke));
 	log(printPokemonData(p2Poke));
 
 	checkWinner();
 
 	if (!gameHasWinner()) {
-
 		bool p1NeedsToSwitch = playerNeedsToSwitch(player1);
 		bool p2NeedsToSwitch = playerNeedsToSwitch(player2);
 

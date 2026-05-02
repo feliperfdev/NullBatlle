@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"C:/Dev/Estudos - DEV/c_cpp/NullBattle/out/build/x64-debug/_deps/nlohmann_json-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

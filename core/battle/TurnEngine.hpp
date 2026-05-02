@@ -6,11 +6,13 @@
 #include <optional>
 #include <iostream>
 #include <random>
+#include <cmath>
 #include "BattleAction.hpp"
 #include "../models/Pokemon.hpp"
 #include "../models/Move.hpp"
 #include "../models/Item.hpp"
 #include "../models/Player.hpp"
+#include "ConditionEngine.hpp"
 
 class TurnEngine {
 	public:
@@ -43,6 +45,9 @@ class TurnEngine {
 		BattleAction p1Action;
 		BattleAction p2Action;
 		std::mt19937 m_rng;
+
+		ConditionEngine conditionEngine;
+
 		int generateRandom(int max);
 		void log(const std::string& text);
 };

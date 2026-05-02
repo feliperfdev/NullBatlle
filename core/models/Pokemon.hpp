@@ -53,6 +53,10 @@ struct Pokemon
 			return battleCondition != BattleCondition::NONE;
 		}
 
+		void applyCondition(BattleCondition condition) {
+			battleCondition = condition;
+		}
+
 		void receiveDamage(int damage) {
 			if (currentHP > 0) {
 				currentHP -= damage;
