@@ -1,0 +1,50 @@
+# Build output
+out/
+build/
+cmake-build-*/
+
+# Visual Studio / MSVC
+.vs/
+*.VC.db
+*.VC.VC.opendb
+CMakeUserPresets.json
+
+# Compiled artifacts
+*.exe
+*.dll
+*.lib
+*.obj
+*.o
+*.pdb
+*.ilk
+*.idb
+*.iobj
+*.ipdb
+*.exp
+
+# CMake generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+python/data/
+
+# Editor
+.vscode/settings.json
+.vscode/launch.json
+.vscode/c_cpp_properties.json
+*.swp
+*~
+
+# OS
+Thumbs.db
+.DS_Store

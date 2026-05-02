@@ -1,6 +1,6 @@
 # NullBattle
 
-A turn-based Pokémon battle engine written in C++17, replicating Generation 3 mechanics — damage formula, type effectiveness, speed/priority ordering, and status conditions.
+A turn-based Pokémon battle engine written in C++20, replicating Generation 3 mechanics — damage formula, type effectiveness, speed/priority ordering, and status conditions.
 
 ---
 
@@ -14,7 +14,7 @@ NullBattle is a from-scratch battle simulator that loads all 386 Gen 1–3 Poké
 
 | Layer | Technology |
 |---|---|
-| **Language** | C++17 |
+| **Language** | C++20 |
 | **Build System** | CMake 3.10+ |
 | **Compiler** | MSVC (with Hot Reload support) |
 | **JSON Parsing** | [nlohmann/json](https://github.com/nlohmann/json) v3.12.0 (via FetchContent) |
@@ -69,7 +69,7 @@ Each player submits a `BattleAction` (Use Move / Switch Pokémon / Use Item) bef
 damage = floor((floor(2 * level / 5 + 2) * power * attack / defense) / 50) + 2
 ```
 
-The formula is implemented. Currently `attack` and `defense` always resolve to the Physical stats (Atk/Def); the Special branch (SpAtk/SpDef for `category == 2`) is not yet wired in.
+Physical moves use `Atk`/`Def`; Special moves use `SpAtk`/`SpDef` based on `move.category`.
 
 **Not yet implemented:** STAB (×1.5), type effectiveness, critical hits, random damage roll (0.85–1.00), and burn halving.
 
@@ -92,7 +92,11 @@ The `Pokemon` struct tracks `battleCondition` as a typed `BattleCondition` enum:
 | `BattleCondition::CONFUSED` | Confusion |
 | `BattleCondition::ATTRACTED` | Attraction |
 
-Status flags are stored and query helpers (`isBurned()`, `isParalyzed()`, etc.) are implemented on `Pokemon`. End-of-turn effects (burn chip damage, poison damage, sleep counter, paralysis speed drop) and a dedicated `StatusManager` are not yet implemented.
+The `ConditionEngine` handles three responsibilities:
+
+- **`conditionAllowsToAction`** — checks whether a Pokémon's condition (paralysis, sleep, freeze) prevents it from acting this turn.
+- **`applyUsedMoveConditionIfApplicable`** — applies a status condition to the target based on the move used.
+- **`checkPostActionBattleCondition`** — resolves end-of-turn condition damage (burn, poison) and counter decrements (sleep turns).
 
 ### 7. Type Effectiveness
 
@@ -108,13 +112,18 @@ NullBattle/
 ├── CMakePresets.json       # Debug / Release presets
 ├── NullBattle.cpp/.h       # Entry point and main game loop
 │
+├── common/                 # Shared utilities used across layers
+│   ├── UuidV4.cpp                    # UUID v4 generator
+│   ├── pokemon_print_helpers.cpp/.hpp # Console print helpers for battle panels
+│
 ├── core/                   # Pure battle logic — no UI dependency
 │   ├── CMakeLists.txt      # Builds nullbattle_core static library
 │   ├── battle/
 │   │   ├── BattleState.hpp              # State enum + string map
 │   │   ├── BattleAction.hpp             # ActionType enum + BattleAction struct
 │   │   ├── BattleStateMachine.hpp/.cpp  # State transitions and main loop
-│   │   └── TurnEngine.hpp/.cpp          # Turn ordering and damage application
+│   │   ├── TurnEngine.hpp/.cpp          # Turn ordering and damage application
+│   │   └── ConditionEngine.hpp/.cpp     # Status condition checks and effects
 │   └── models/
 │       ├── Pokemon.hpp     # Stats, HP, types, moves, battle condition + accessors
 │       ├── Move.hpp        # PP, power, priority, accuracy, category, type
@@ -212,15 +221,16 @@ Categories: `MoveCategory::PHYSICAL` (1), `MoveCategory::SPECIAL` (2), `MoveCate
 | Turn ordering (speed + priority) | Done |
 | Accuracy roll | Done |
 | Gen 3 damage formula (base) | Done |
-| Physical vs Special stat selection | Planned |
+| Physical vs Special stat selection | Done |
+| Status condition flags + query helpers | Done |
+| Status condition gating (paralysis, sleep, freeze) | Done |
+| Status condition application via moves | Done |
+| Status condition effects (burn/poison chip, sleep counter) | Done |
 | STAB modifier | Planned |
 | Type effectiveness in damage | Planned |
 | Critical hits | Planned |
 | Random damage roll (0.85–1.00) | Planned |
 | Burn halving attack in damage | Planned |
-| Status condition flags + query helpers | Done |
-| Status condition effects (end-of-turn) | Planned |
-| Item data structures | Done |
 | Item usage in battle | Planned |
 | UI (Dear ImGui) | Planned |
 | Unit tests (Catch2) | Planned |
