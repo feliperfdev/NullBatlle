@@ -3,8 +3,10 @@
 int BattleStateMachine::getTotalTurns() const { return totalTurns; }
 
 BattleStateMachine::BattleStateMachine(
-	Player& player1, Player& player2
-) : currentState(BattleState::TEAM_SELECT), winnerId(0), player1(player1), player2(player2) {
+	Player& player1, Player& player2, LogQueue& logQueue
+) : currentState(BattleState::TEAM_SELECT), winnerId(0), 
+	player1(player1), player2(player2), logQueue(logQueue) {
+	
 	log("Initialized Player 1 team: " + printPokemonData(player1.team.party[0]));
 
 	log("Initialized Player 2 team: " + printPokemonData(player2.team.party[0]));
@@ -53,7 +55,7 @@ void BattleStateMachine::executeTurnActions() {
 	if (!checkIfP1HasAction() || !checkIfP2HasAction()) return;
 	totalTurns++;
 
-	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value());
+	TurnEngine turnEngine = TurnEngine(p1Action.value(), p2Action.value(), logQueue);
 
 	Pokemon& p1Poke = p1ActivePokemon();
 	Pokemon& p2Poke = p2ActivePokemon();
@@ -113,8 +115,7 @@ bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const 
 }
 
 void BattleStateMachine::log(const std::string& text) {
-	std::cout << "[" + BattleStateMap[getState()] + "] > ";
-	std::cout << text << std::endl;
+	logQueue.log("BattleStateMachine", text);
 }
 
 Pokemon& BattleStateMachine::p1ActivePokemon() { return player1.team.inBattle(); }

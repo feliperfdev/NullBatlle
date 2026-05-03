@@ -9,6 +9,7 @@
 #include "../models/Pokemon.hpp"
 #include "../models/Team.hpp"
 #include "../../common/pokemon_print_helpers.hpp"
+#include "../../common/LogQueue.cpp"
 #include "BattleAction.hpp"
 #include "BattleState.hpp"
 #include "TurnEngine.hpp"
@@ -18,7 +19,8 @@ class BattleStateMachine {
 		BattleState getState() const;
 
 		BattleStateMachine(
-			Player& player1, Player& player2);
+			Player& player1, Player& player2,
+			LogQueue& logQueue);
 
 		int getTotalTurns() const;
 
@@ -40,6 +42,8 @@ class BattleStateMachine {
 		unsigned int whoWillSwitchPokemon = 0;
 
 	private:
+		LogQueue& logQueue;
+
 		// Both references must outlive this BattleStateMachine.
 		// Ownership belongs to main(), which also owns this machine.
 		Player& player1;

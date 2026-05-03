@@ -1,9 +1,7 @@
 ﻿#include "NullBattle.h"
 #include <DataLoader.hpp>
 
-void log(const std::string& text) {
-	std::cout << "[CoreEngine] " + text << std::endl;
-}
+LogQueue logQueue = LogQueue();
 
 void runPlayersActions(BattleStateMachine& engine) {
 
@@ -79,7 +77,7 @@ void initPlayers(Player& player1, Player& player2,
 }
 
 void forceSwitchActivePokemon(Player& player) {
-	log("Player " + std::to_string(player.id) + " vai trocar de Pokémon!");
+	logQueue.log("CoreEngine", "Player " + std::to_string(player.id) + " vai trocar de Pokémon!");
 
 	int pokemonIndex = 0;
 
@@ -96,7 +94,7 @@ void forceSwitchActivePokemon(Player& player) {
 
 	auto chosenPokemon = player.team.party[pokemonIndex];
 
-	log("Pokémon escolhido: " + chosenPokemon.name);
+	logQueue.log("CoreEngine", "Pokémon escolhido: " + chosenPokemon.name);
 
 	player.team.switchActivePokemon(pokemonIndex);
 }
@@ -125,7 +123,7 @@ void saveMatchResult(
 	file << result.dump(2);
 	file.close();
 
-	log("Resultado salvo em " + filename + "\n");
+	logQueue.log("CoreEngine", "Resultado salvo em " + filename + "\n");
 }
 
 int main()
@@ -133,11 +131,11 @@ int main()
 	setlocale(LC_ALL, "Portuguese");
 
 	try {
-		DataLoader dataLoader = DataLoader();
+		DataLoader dataLoader = DataLoader(logQueue);
 
 		std::string session = UuidV4().generate();
 
-		log("Starting session " + session + "...");
+		logQueue.log("CoreEngine", "Starting session " + session + "...");
 
 		auto movesMap = dataLoader.loadMoves();
 		auto pokemonList = dataLoader.loadPokemon();
@@ -147,7 +145,7 @@ int main()
 		initPlayers(player1, player2, pokemonList, movesMap);
 
 		BattleStateMachine battleEngine = BattleStateMachine(
-			player1, player2
+			player1, player2, logQueue
 		);
 
 		bool battleEnd = false;
@@ -156,7 +154,7 @@ int main()
 
 			switch (battleEngine.getState()) {
 				case BattleState::ACTION_TURN:
-					log("Starting battle...");
+					logQueue.log("CoreEngine", "Starting battle...");
 					runPlayersActions(battleEngine);
 
 					break;
@@ -169,7 +167,7 @@ int main()
 
 					break;
 				case BattleState::ACTION_EXECUTING_TURN:
-					log("Entrando em modo de execução do turno...");
+					logQueue.log("CoreEngine", "Entrando em modo de execução do turno...");
 					battleEngine.executeTurnActions();
 
 					break;
@@ -177,6 +175,7 @@ int main()
 				case BattleState::BATTLE_END:
 					printVictoryScreen(battleEngine.winnerPlayer, battleEngine.getTotalTurns());
 					saveMatchResult(session, battleEngine.getTotalTurns(), battleEngine.winnerPlayer);
+					logQueue.generateLogFile(session);
 
 					battleEnd = true;
 

@@ -8,6 +8,7 @@
 #include "core/battle/BattleStateMachine.hpp"
 #include "core/battle/TurnEngine.hpp"
 #include "common/UuidV4.cpp"
+#include "common/LogQueue.cpp"
 #include <nlohmann/json.hpp>
 #include <fstream> 
 

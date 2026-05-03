@@ -4,8 +4,9 @@
 
 TurnEngine::TurnEngine(
 	BattleAction p1Action,
-	BattleAction p2Action
-) : p1Action(std::move(p1Action)), p2Action(std::move(p2Action)),
+	BattleAction p2Action,
+	LogQueue& logQueue
+) : p1Action(std::move(p1Action)), p2Action(std::move(p2Action)), logQueue(logQueue),
     m_rng(std::random_device{}())
 {
 	log("Started Turn Engine!");
@@ -122,5 +123,5 @@ void TurnEngine::switchActivePokemon(Player& player, int pokemonIndex) {
 }
 
 void TurnEngine::log(const std::string& text) {
-	std::cout << "[TurnEngine] " + text << std::endl;
+	logQueue.log("TurnEngine", text);
 }

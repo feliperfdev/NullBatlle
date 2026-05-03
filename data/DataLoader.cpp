@@ -1,5 +1,9 @@
 #include "DataLoader.hpp"
 
+DataLoader::DataLoader(LogQueue& logQueue) : logQueue(logQueue) {
+
+}
+
 std::map<std::string, Move> DataLoader::loadMoves() {
 	std::map<std::string, Move> moves = {};
 
@@ -95,5 +99,5 @@ std::vector<PokemonTemplate> DataLoader::loadPokemon() {
 }
 
 void DataLoader::log(const std::string& text) {
-	std::cout << "[DataLoader] " + text << std::endl;
+	logQueue.log("DataLoader", text);
 }

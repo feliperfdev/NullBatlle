@@ -12,6 +12,7 @@
 #include "../models/Move.hpp"
 #include "../models/Item.hpp"
 #include "../models/Player.hpp"
+#include "../../common/LogQueue.cpp"
 #include "ConditionEngine.hpp"
 
 class TurnEngine {
@@ -20,7 +21,8 @@ class TurnEngine {
 
 		TurnEngine(
 			BattleAction p1Action,
-			BattleAction p2Action
+			BattleAction p2Action,
+			LogQueue& logQueue
 		);
 
 		int determineOrder(
@@ -42,6 +44,8 @@ class TurnEngine {
 		void switchActivePokemon(Player& player, int pokemonIndex);
 
 	private:
+		LogQueue& logQueue;
+
 		BattleAction p1Action;
 		BattleAction p2Action;
 		std::mt19937 m_rng;
