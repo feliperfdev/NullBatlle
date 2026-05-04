@@ -7,7 +7,7 @@ TurnEngine::TurnEngine(
 	BattleAction p2Action,
 	LogQueue& logQueue
 ) : p1Action(std::move(p1Action)), p2Action(std::move(p2Action)), logQueue(logQueue),
-    m_rng(std::random_device{}())
+    m_rng(std::random_device{}()), conditionEngine(ConditionEngine(logQueue))
 {
 	log("Started Turn Engine!");
 }

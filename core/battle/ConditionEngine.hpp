@@ -11,15 +11,21 @@
 #include "../models/Move.hpp"
 #include "../models/Item.hpp"
 #include "../models/Player.hpp"
+#include "../../common/LogQueue.cpp"
 
 class ConditionEngine {
 	public:
+		ConditionEngine(LogQueue& logQueue);
+
 		bool conditionAllowsToAction(Pokemon& pokemon);
 		void checkPostActionBattleCondition(Pokemon& pokemon);
 
 		void applyUsedMoveConditionIfApplicable(Pokemon& pokemon, Move& move);
 
 	private:
+
+		LogQueue& logQueue;
+
 		std::mt19937 m_rng;
 
 		int generateRandom(int max);

@@ -1,5 +1,7 @@
 #include "ConditionEngine.hpp"
 
+ConditionEngine::ConditionEngine(LogQueue& logQueue) : logQueue(logQueue) {}
+
 int ConditionEngine::generateRandom(int max) {
 	std::uniform_int_distribution<int> dist(1, max);
 	return dist(m_rng);
@@ -86,58 +88,164 @@ void ConditionEngine::checkPostActionBattleCondition(Pokemon& pokemon) {
 				static_cast<int>(std::round(pokemon.maxHP() * 0.0625)));
 
 			break;
+		
+		case BattleCondition::FREEZED:
+
+			pokemon.receiveDamage(
+				static_cast<int>(std::round(pokemon.maxHP() * 0.0625)));
+
+			break;
 	}
 }
 
 void ConditionEngine::applyUsedMoveConditionIfApplicable(Pokemon& pokemon, Move& move) {
 	switch (move.type) {
-		case Types::FIRE:
+		case Types::FIRE: {
 			double chance = 0.0;
 
 			if (
-				move.name == "flamethrower" &&
-				move.name == "fire-punch" &&
-				move.name == "fire-blast" &&
-				move.name == "fire-fang" &&
+				move.name == "flamethrower" ||
+				move.name == "fire-punch" ||
+				move.name == "fire-blast" ||
+				move.name == "fire-fang" ||
 				move.name == "ember"
 				) {
 				chance = 0.1;
 			}
 
 			if (
-				move.name == "scald" &&
-				move.name == "lava-plume" &&
-				move.name == "steam-eruption" &&
-				move.name == "ice-burn" &&
+				move.name == "scald" ||
+				move.name == "lava-plume" ||
+				move.name == "steam-eruption" ||
+				move.name == "ice-burn" ||
 				move.name == "searing-shot"
 				) {
 				chance = 0.3;
 			}
 
-			if (
-				move.name == "sacred-fire"
-				) {
+			if (move.name == "sacred-fire") {
 				chance = 0.5;
 			}
 
-			if (
-				move.name == "will-o-wisp"
-				) {
+			if (move.name == "will-o-wisp") {
 				chance = 1;
 			}
 
-			if (chance == 0) return;
+			if (chance == 0) break;
 
 			int seed = chance == 1 ? 1 : generateRandom(100);
 
-			if ((1 / seed) <= chance) {
+			if ((1.0 / seed) <= chance) {
 				pokemon.applyCondition(BattleCondition::BURNED);
 			}
 
 			break;
+		}
+
+		case Types::ELECTRIC: {
+			double chance = 0.0;
+
+			if (
+				move.name == "thunder-shock" ||
+				move.name == "thunder-punch" ||
+				move.name == "bolt-strike" ||
+				move.name == "volt-tackle" ||
+				move.name == "thunderbolt"
+				) {
+				chance = 0.1;
+			}
+
+			if (
+				move.name == "spark" ||
+				move.name == "discharge" ||
+				move.name == "thunder"
+				) {
+				chance = 0.3;
+			}
+
+			if (move.name == "zap-cannon") {
+				chance = 0.5;
+			}
+
+			if (
+				move.name == "stun-spore" ||
+				move.name == "glare"
+				) {
+				chance = 0.75;
+			}
+
+			if (
+				move.name == "thunder-wave" ||
+				move.name == "nuzzle"
+				) {
+				chance = 1;
+			}
+
+			if (chance == 0) break;
+
+			int seed = chance == 1 ? 1 : generateRandom(100);
+
+			if ((1.0 / seed) <= chance) {
+				pokemon.applyCondition(BattleCondition::PARALYZED);
+			}
+
+			break;
+		}
+
+		case Types::ICE: {
+			double chance = 0.0;
+
+			if (
+				move.name == "ice-beam" ||
+				move.name == "ice-punch" ||
+				move.name == "blizzard" ||
+				move.name == "powder-snow" ||
+				move.name == "freeze-dry" ||
+				move.name == "ice-fang"
+				) {
+				chance = 0.1;
+			}
+
+			if (chance == 0) break;
+
+			int seed = chance == 1 ? 1 : generateRandom(100);
+
+			if ((1.0 / seed) <= chance) {
+				pokemon.applyCondition(BattleCondition::FREEZED);
+			}
+
+			break;
+		}
+
+		case Types::NORMAL: {
+			if (
+				move.name == "body-slam" ||
+				move.name == "lick"
+				) {
+				int seed = generateRandom(100);
+
+				if ((1.0 / seed) <= 0.3) {
+					pokemon.applyCondition(BattleCondition::PARALYZED);
+				}
+			}
+
+			break;
+		}
+
+		case Types::DRAGON: {
+			if (move.name == "dragon-breath") {
+				int seed = generateRandom(100);
+
+				if ((1.0 / seed) <= 0.3) {
+					pokemon.applyCondition(BattleCondition::PARALYZED);
+				}
+			}
+
+			break;
+		}
 	}
 }
 
 void ConditionEngine::log(const std::string& text) {
-	std::cout << "[ConditionEngine] " + text << std::endl;
+	logQueue.log("ConditionEngine", text);
 }
