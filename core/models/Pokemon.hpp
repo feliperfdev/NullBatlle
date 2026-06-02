@@ -54,6 +54,8 @@ struct Pokemon
 		}
 
 		void applyCondition(BattleCondition condition) {
+			if (hasAnyBattleCondition()) return;
+
 			battleCondition = condition;
 		}
 

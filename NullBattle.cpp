@@ -25,7 +25,32 @@ void runPlayersActions(BattleStateMachine& engine) {
 			std::cin >> actionIndex;
 		}
 
-		if (actionIndex == 0) { actionIndex = 1; }
+		if (ActionTypeMap[action] == ActionType::CHOOSE_POKEMON) {
+			auto& player = engine.getPlayerById(k + 1);
+
+			logQueue.log("CoreEngine", "Player " + std::to_string(player.id) + " vai trocar de Pokémon!");
+
+			int pokemonIndex = 0;
+
+			unsigned int partyIndex = 0;
+
+			for (auto& poke : player.team.party) {
+				std::cout << printPokemonData(poke) << std::endl;
+			}
+
+			std::cout << "[Player " + std::to_string(player.id) + "] Escolha o index do pokémon do " +
+				"seu time para substituir por " + player.team.inBattle().name + ": ";
+
+			std::cin >> pokemonIndex;
+
+			auto chosenPokemon = player.team.party[pokemonIndex];
+
+			logQueue.log("CoreEngine", "Pokémon escolhido: " + chosenPokemon.name);
+
+			player.team.switchActivePokemon(pokemonIndex);
+		}
+
+		if (actionIndex <= 0) { actionIndex = 1; }
 
 		if (k + 1 == 1) {
 			engine.player1Action(BattleAction{ ActionTypeMap[action], actionIndex - 1 });
@@ -76,7 +101,7 @@ void initPlayers(Player& player1, Player& player2,
 	player2.team.party = {charmander, squirtle};
 }
 
-void forceSwitchActivePokemon(Player& player) {
+void chooseToSwitchActivePokemon(Player& player) {
 	logQueue.log("CoreEngine", "Player " + std::to_string(player.id) + " vai trocar de Pokémon!");
 
 	int pokemonIndex = 0;
@@ -160,7 +185,7 @@ int main()
 					break;
 				case BattleState::SWITCH_AFTER_FAINT:
 
-					forceSwitchActivePokemon(
+					chooseToSwitchActivePokemon(
 						battleEngine.whoWillSwitchPokemon == 1 ? player1 : player2);
 
 					battleEngine.startNewTurn();

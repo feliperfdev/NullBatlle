@@ -2,6 +2,10 @@
 
 int BattleStateMachine::getTotalTurns() const { return totalTurns; }
 
+Player& BattleStateMachine::getPlayerById(int id) {
+	return id == 1 ? player1 : player2;
+}
+
 BattleStateMachine::BattleStateMachine(
 	Player& player1, Player& player2, LogQueue& logQueue
 ) : currentState(BattleState::TEAM_SELECT), winnerId(0), 
@@ -51,6 +55,64 @@ void BattleStateMachine::startExecutingTurn() { currentState = BattleState::ACTI
 
 void BattleStateMachine::startNewTurn() { currentState = BattleState::ACTION_TURN; }
 
+void BattleStateMachine::player1ActionExecution(TurnEngine& turnEngine) {
+	Pokemon& p1Poke = p1ActivePokemon();
+	Pokemon& p2Poke = p2ActivePokemon();
+
+	ActionType p1ActionType = p1Action.value().type;
+	int p1Index = p1Action.value().index;
+
+	if (p1ActionType == ActionType::USE_MOVE) {
+		Move& selectedMove = p1Poke.moves.at(p1Index);
+		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMove);
+	}
+	else if (p1ActionType == ActionType::CHOOSE_POKEMON) {
+		whoWillSwitchPokemon = player1.id;
+		currentState = BattleState::SWITCH_IN;
+		turnEngine.switchActivePokemon(player1, p1Index);
+	}
+	else if (p1ActionType == ActionType::USE_ITEM) {
+		Item& selectedItem = player1.bag.items.at(p1Index);
+		turnEngine.executeItemAction(p1Poke, selectedItem);
+	}
+}
+
+void BattleStateMachine::player2ActionExecution(TurnEngine& turnEngine) {
+	Pokemon& p1Poke = p1ActivePokemon();
+	Pokemon& p2Poke = p2ActivePokemon();
+
+	ActionType p2ActionType = p2Action.value().type;
+	int p2Index = p2Action.value().index;
+
+	if (p2ActionType == ActionType::USE_MOVE) {
+		Move& selectedMove = p2Poke.moves.at(p2Index);
+		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMove);
+	}
+	else if (p2ActionType == ActionType::CHOOSE_POKEMON) {
+		whoWillSwitchPokemon = player2.id;
+		currentState = BattleState::SWITCH_IN;
+		turnEngine.switchActivePokemon(player2, p2Index);
+	}
+	else if (p2ActionType == ActionType::USE_ITEM) {
+		Item& selectedItem = player2.bag.items.at(p2Index);
+		turnEngine.executeItemAction(p2Poke, selectedItem);
+	}
+}
+
+void BattleStateMachine::takeDecision(int order, TurnEngine& turnEngine) {
+	// Player 1 goes first
+	if (order == 1) {
+		player1ActionExecution(turnEngine);
+		player2ActionExecution(turnEngine);
+	}
+
+	// Player 2 goes first
+	else {
+		player2ActionExecution(turnEngine);
+		player1ActionExecution(turnEngine);
+	}
+}
+
 void BattleStateMachine::executeTurnActions() {
 	if (!checkIfP1HasAction() || !checkIfP2HasAction()) return;
 	totalTurns++;
@@ -60,22 +122,9 @@ void BattleStateMachine::executeTurnActions() {
 	Pokemon& p1Poke = p1ActivePokemon();
 	Pokemon& p2Poke = p2ActivePokemon();
 
-	int order = turnEngine.determineOrder(
-		p1Poke,
-		p2Poke
-	);
+	int order = turnEngine.determineOrder(p1Poke, p2Poke);
 
-	Move& selectedMoveP1 = p1Poke.moves.at(p1Action.value().index);
-	Move& selectedMoveP2 = p2Poke.moves.at(p2Action.value().index);
-
-	if (order == 1) {
-		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
-		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
-	}
-	else {
-		turnEngine.executeMoveAction(p2Poke, p1Poke, selectedMoveP2);
-		turnEngine.executeMoveAction(p1Poke, p2Poke, selectedMoveP1);
-	}
+	takeDecision(order, turnEngine);
 
 	log(printPokemonData(p1Poke));
 	log(printPokemonData(p2Poke));
@@ -98,13 +147,7 @@ void BattleStateMachine::executeTurnActions() {
 }
 
 bool BattleStateMachine::playerNeedsToSwitch(Player& player) {
-	if (player.team.inBattle().isDefeated()) {
-		if (player.team.hasAlivePokemon()) {
-			return true;
-		}
-	}
-
-	return false;
+	return player.team.inBattle().isDefeated() && player.team.hasAlivePokemon();
 }
 
 bool BattleStateMachine::isOver(const std::array<Pokemon, 6>& playerTeam) const {

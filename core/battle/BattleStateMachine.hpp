@@ -41,6 +41,8 @@ class BattleStateMachine {
 
 		unsigned int whoWillSwitchPokemon = 0;
 
+		Player& getPlayerById(int id);
+
 	private:
 		LogQueue& logQueue;
 
@@ -55,6 +57,10 @@ class BattleStateMachine {
 		std::optional<BattleAction> p2Action;
 
 		bool isOver(const std::array<Pokemon, 6>& playerTeam) const;
+
+		void takeDecision(int order, TurnEngine& turnEngine);
+		void player1ActionExecution(TurnEngine& turnEngine);
+		void player2ActionExecution(TurnEngine& turnEngine);
 
 		bool checkIfP1HasAction();
 		bool checkIfP2HasAction();
